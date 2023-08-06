@@ -57,6 +57,22 @@ public abstract class CanvasComponentBase : ComponentBase {
   protected TextBox AddTextBox(string text) => AddTextBox().Text(text);
   protected TextBox AddTextBox() => Add(new TextBox());
 
+  protected CheckBox AddCheckBox(string text, Action<RoutedEventArgs> onIsCheckedChanged) {
+    var checkBox = AddCheckBox(text);
+    checkBox.OnIsCheckedChanged(onIsCheckedChanged);
+    return checkBox;
+  }
+  protected CheckBox AddCheckBox(string text) => AddCheckBox().Content(text);
+  protected CheckBox AddCheckBox() => Add(new CheckBox());
+
+  protected RadioButton AddRadio(string groupName, string text, Action<RoutedEventArgs> onIsCheckedChanged) {
+    var radio = AddRadio(groupName, text);
+    radio.OnIsCheckedChanged(onIsCheckedChanged);
+    return radio;
+  }
+  protected RadioButton AddRadio(string groupName, string text) => AddRadio(groupName).Content(text);
+  protected RadioButton AddRadio(string groupName) => Add(new RadioButton()).GroupName(groupName);
+
   protected T Add<T>(T control) where T : Control {
     Canvas.Children.Add(control);
     return control.Ref();
