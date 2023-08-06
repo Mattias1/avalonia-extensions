@@ -5,11 +5,12 @@ namespace AvaloniaExtensions;
 
 public static class CanvasControlExtensions {
   // --- Reference to static variable ---
+  private const string REF_ERROR = "You can only use this method without parameters if you've previously referenced an "
+      + "object. Did you call `.Ref()` on the previous element?";
   public static Control? LastReferenced = null;
   public static Control? CurrentReferenced = null;
-  private static Control LastReferencedOrThrow => LastReferenced ?? throw new InvalidOperationException("You can only "
-      + "use this method without parameters if you've previously referenced an object. "
-      + "Did you call `.Ref()` on the previous element?");
+  public static Control LastReferencedOrThrow => LastReferenced ?? throw new InvalidOperationException(REF_ERROR);
+  public static Control CurrentReferencedOrThrow => CurrentReferenced ?? throw new InvalidOperationException(REF_ERROR);
 
   public static T Ref<T>(this T control) where T : Control {
     LastReferenced = CurrentReferenced;

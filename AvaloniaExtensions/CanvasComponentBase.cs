@@ -73,6 +73,22 @@ public abstract class CanvasComponentBase : ComponentBase {
   protected RadioButton AddRadio(string groupName, string text) => AddRadio(groupName).Content(text);
   protected RadioButton AddRadio(string groupName) => Add(new RadioButton()).GroupName(groupName);
 
+  protected Label AddLabelRightOf(string text) => AddLabelRightOf(text, CanvasControlExtensions.CurrentReferencedOrThrow);
+  protected Label AddLabelRightOf(string text, Control target) => AddLabel(text, target).XRightOf(target).YCenter(target);
+  protected Label AddLabelLeftOf(string text) => AddLabelLeftOf(text, CanvasControlExtensions.CurrentReferencedOrThrow);
+  protected Label AddLabelLeftOf(string text, Control target) => AddLabel(text, target).XLeftOf(target).YCenter(target);
+  protected Label InsertLabelLeftOf(string text) {
+    return InsertLabelLeftOf(text, CanvasControlExtensions.CurrentReferencedOrThrow);
+  }
+  protected Label InsertLabelLeftOf(string text, Control target) {
+    var label = AddLabel(text, target).XAlignLeft(target).YCenter(target);
+    target.XRightOf(label);
+    return label;
+  }
+  protected Label AddLabel(string text, Control target) => Add(new Label()).Content(text).Target(target);
+
+  protected TextBlock AddTextBlock(string text) => Add(new TextBlock()).Text(text);
+
   protected T Add<T>(T control) where T : Control {
     Canvas.Children.Add(control);
     return control.Ref();

@@ -12,6 +12,7 @@ public class MainComponent : CanvasComponentBase {
   protected override void InitializeControls() {
     // Some realistic-ish example controls
     AddButton("Hello world", AddText("Whazzup folks, watcha doing?")).TopLeftInPanel();
+    InsertLabelLeftOf("Say:");
     AddMultilineTextBox().Ref(out _tb).Below();
 
     AddButton("Cancel", ClearText()).BottomRightInPanel();
