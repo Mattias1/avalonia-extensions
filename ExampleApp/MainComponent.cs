@@ -1,7 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Declarative;
 using AvaloniaExtensions;
 
 namespace ExampleApp;
@@ -13,13 +12,15 @@ public class MainComponent : CanvasComponentBase {
     // Some realistic-ish example controls
     AddButton("Hello world", AddText("Whazzup folks, watcha doing?")).TopLeftInPanel();
     InsertLabelLeftOf("Say:");
-    AddMultilineTextBox().Ref(out _tb).Below();
+    _tb = AddMultilineTextBox().Below();
+    AddComboBox(new [] { "item1", "item2", "item3" }, AddSelectedText).TopRightInPanel();
+    AddLabelLeftOf("Select:");
 
     AddButton("Cancel", ClearText()).BottomRightInPanel();
     AddButton("Ok", AddText("kk")).LeftOf();
 
     AddRadio("r-group-1", "Left 2", AddTextIfChecked("Left radio two")).BottomLeftInPanel();
-    AddRadio("r-group-1", "Left 1", AddTextIfChecked("Left radio one")).Ref(out var radioLeft1).Above();
+    var radioLeft1 = AddRadio("r-group-1", "Left 1", AddTextIfChecked("Left radio one")).Above();
     AddRadio("r-group-2", "Right 1", AddTextIfChecked("Right radio one")).RightOf();
     AddRadio("r-group-2", "Right 2", AddTextIfChecked("Right radio two")).Below();
     AddCheckBox("Check 2", AddTextIfChecked("Checkbox two")).RightOf();
@@ -28,9 +29,9 @@ public class MainComponent : CanvasComponentBase {
     _tb.StretchRightInPanel().StretchDownTo(radioLeft1);
 
     // Some extra buttons to show off
-    AddButton("CC").Ref(out var cc).CenterInPanel();
+    var cc = AddButton("CC").CenterInPanel();
     AddButton("CC T").Above(cc);
-    AddButton("CC L ==").Ref(out var ccl).LeftOf(cc).StretchDownInPanel();
+    AddButton("CC L ==").LeftOf(cc).StretchDownInPanel();
     AddButton("CC R").RightOf(cc);
     AddButton("CC B").Below(cc);
 
@@ -42,7 +43,9 @@ public class MainComponent : CanvasComponentBase {
 
   private Action<RoutedEventArgs> AddText(string text) => _ => _tb.Text += text + '\n';
 
-  protected Action<RoutedEventArgs> AddTextIfChecked(string text) {
+  private void AddSelectedText(SelectedItemChangedEventArgs<string> e) => _tb.Text += $"Selected: {e.SelectedItem}\n";
+
+  private Action<RoutedEventArgs> AddTextIfChecked(string text) {
     return e => {
       var sender = e.Source as ToggleButton;
       if (sender?.IsChecked == true) {

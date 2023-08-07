@@ -5,6 +5,7 @@ using Avalonia.Markup.Declarative;
 
 namespace AvaloniaExtensions;
 
+// ReSharper disable MemberCanBePrivate.Global
 public abstract class CanvasComponentBase : ComponentBase {
   private static readonly Dictionary<Canvas, CanvasComponentBase> CANVAS_COMPONENT_DICTIONARY = new();
 
@@ -73,6 +74,26 @@ public abstract class CanvasComponentBase : ComponentBase {
   protected RadioButton AddRadio(string groupName, string text) => AddRadio(groupName).Content(text);
   protected RadioButton AddRadio(string groupName) => Add(new RadioButton()).GroupName(groupName);
 
+  protected ExtendedComboBox<T> AddComboBox<T>(IEnumerable<T> items,
+      Action<SelectedItemChangedEventArgs<T>> onSelectedItemChanged) where T : class, IControlContentItem {
+    return AddComboBox(items).OnSelectedItemChanged(onSelectedItemChanged);
+  }
+  protected ExtendedComboBox<T> AddComboBox<T>(IEnumerable<T> items) where T : class, IControlContentItem {
+    return AddComboBox(items, i => i.ControlContent());
+  }
+  protected ExtendedComboBox<string> AddComboBox(IEnumerable<string> items,
+      Action<SelectedItemChangedEventArgs<string>> onSelectedItemChanged) {
+    return AddComboBox(items).OnSelectedItemChanged(onSelectedItemChanged);
+  }
+  protected ExtendedComboBox<string> AddComboBox(IEnumerable<string> items) => AddComboBox(items, i => i);
+  protected ExtendedComboBox<T> AddComboBox<T>(IEnumerable<T> items, Func<T, string> contentFunc) where T : class {
+    var comboBox = Add(new ExtendedComboBox<T>()).WithItems(items, contentFunc);
+    if (comboBox.Items.Count > 0) {
+      comboBox.SelectedIndex = 0;
+    }
+    return comboBox;
+  }
+
   protected Label AddLabelRightOf(string text) => AddLabelRightOf(text, CanvasControlExtensions.CurrentReferencedOrThrow);
   protected Label AddLabelRightOf(string text, Control target) => AddLabel(text, target).XRightOf(target).YCenter(target);
   protected Label AddLabelLeftOf(string text) => AddLabelLeftOf(text, CanvasControlExtensions.CurrentReferencedOrThrow);
@@ -93,4 +114,8 @@ public abstract class CanvasComponentBase : ComponentBase {
     Canvas.Children.Add(control);
     return control.Ref();
   }
+}
+
+public interface IControlContentItem {
+  public string ControlContent();
 }
