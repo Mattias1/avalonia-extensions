@@ -2,6 +2,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Declarative;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
 
 namespace AvaloniaExtensions;
 
@@ -109,6 +111,11 @@ public abstract class CanvasComponentBase : ComponentBase {
   protected Label AddLabel(string text, Control target) => Add(new Label()).Content(text).Target(target);
 
   protected TextBlock AddTextBlock(string text) => Add(new TextBlock()).Text(text);
+
+  protected Image AddImage(int width, int height) => AddImage().Width(width).Height(height);
+  protected Image AddImage(string fileName) => AddImage(new Bitmap(fileName));
+  protected Image AddImage(Bitmap bitmap) => AddImage().Source(bitmap);
+  protected Image AddImage() => Add(new Image());
 
   protected T Add<T>(T control) where T : Control {
     Canvas.Children.Add(control);

@@ -29,4 +29,10 @@
     <ProjectReference Include="..\AvaloniaExtensions\AvaloniaExtensions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="assets\smiley.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

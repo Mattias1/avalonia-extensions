@@ -3,10 +3,13 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Declarative;
 using Avalonia.Themes.Fluent;
+using System.Reflection;
 
 namespace AvaloniaExtensions;
 
 public static class AppBuilderExtensions {
+  public static string? StartupPath => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
   public static AppBuilder Init() => AppBuilder.Configure<Application>().UsePlatformDetect();
 
   public static Application StartDesktopApp(this AppBuilder builder, string windowTitle, Func<ViewBase> contentFunc) {

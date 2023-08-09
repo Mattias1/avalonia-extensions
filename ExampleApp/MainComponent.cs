@@ -10,11 +10,13 @@ public class MainComponent : CanvasComponentBase {
 
   protected override void InitializeControls() {
     // Some realistic-ish example controls
-    AddButton("Hello world", AddText("Whazzup folks, watcha doing?")).TopLeftInPanel();
-    InsertLabelLeftOf("Say:");
-    _tb = AddMultilineTextBox().Below();
+    var btnHelloWorld = AddButton("Hello world", AddText("Whazzup folks, watcha doing?")).TopLeftInPanel();
+    _tb = AddMultilineTextBox().Below(btnHelloWorld);
+    InsertLabelLeftOf("Say:", btnHelloWorld);
     AddComboBox(new [] { "item1", "item2", "item3" }, AddSelectedText).TopRightInPanel();
     AddLabelLeftOf("Select:");
+
+    AddImage(AppBuilderExtensions.StartupPath + "/assets/smiley.png").TopCenterInPanel().YCenter(btnHelloWorld);
 
     AddButton("Cancel", ClearText()).BottomRightInPanel();
     AddButton("Ok", AddText("kk")).LeftOf();
@@ -35,13 +37,12 @@ public class MainComponent : CanvasComponentBase {
     AddButton("CC R").RightOf(cc);
     AddButton("CC B").Below(cc);
 
-    AddButton("TC").TopCenterInPanel();
     AddButton("CL").CenterLeftInPanel();
     AddButton("CR").CenterRightInPanel();
     AddButton("BC").BottomCenterInPanel();
   }
 
-  private Action<RoutedEventArgs> AddText(string text) => _ => _tb.Text += text + '\n';
+  private Action<RoutedEventArgs> AddText(string text) => _ => _tb.Text += $"{text}\n";
 
   private void AddSelectedText(SelectedItemChangedEventArgs<string> e) => _tb.Text += $"Selected: {e.SelectedItem}\n";
 
