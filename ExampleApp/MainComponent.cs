@@ -31,15 +31,15 @@ public class MainComponent : CanvasComponentBase {
     _tb.StretchRightInPanel().StretchDownTo(radioLeft1);
 
     // Some extra buttons to show off
+    AddButton("CL").CenterLeftInPanel();
+    var cr = AddButton("CR").CenterRightInPanel();
+    AddButton("BC").BottomCenterInPanel();
+
     var cc = AddButton("CC").CenterInPanel();
     AddButton("CC T").Above(cc);
     AddButton("CC L ==").LeftOf(cc).StretchDownInPanel();
-    AddButton("CC R").RightOf(cc);
+    AddButton("CC R ==").RightOf(cc).StretchRightTo(cr);
     AddButton("CC B").Below(cc);
-
-    AddButton("CL").CenterLeftInPanel();
-    AddButton("CR").CenterRightInPanel();
-    AddButton("BC").BottomCenterInPanel();
   }
 
   private Action<RoutedEventArgs> AddText(string text) => _ => _tb.Text += $"{text}\n";

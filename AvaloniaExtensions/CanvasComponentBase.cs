@@ -1,8 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
 using Avalonia.Markup.Declarative;
-using Avalonia.Media;
 using Avalonia.Media.Imaging;
 
 namespace AvaloniaExtensions;
@@ -13,6 +13,9 @@ public abstract class CanvasComponentBase : ComponentBase {
 
   private readonly List<Action> _resizeActions = new List<Action>();
   protected Canvas Canvas { get; private set; } = null!; // This will be initialised before it's being used (hopefully :P)
+
+  public virtual CustomStyle CustomStyle => new CustomStyle(new Thickness(10), 80,
+      ThemedBrushes.FromHex("FAFAFA", "363636"));
 
   protected override object Build() {
     Canvas = new Canvas();
@@ -28,6 +31,17 @@ public abstract class CanvasComponentBase : ComponentBase {
       action();
     }
     base.OnSizeChanged(e);
+  }
+
+  protected override void OnLoaded(RoutedEventArgs e) {
+    SetupThemeColours();
+    base.OnLoaded(e);
+  }
+
+  public void SetupThemeColours() {
+    if (CustomStyle.Background is not null) {
+      Canvas.Background = CustomStyle.Background.ForTheme(ActualThemeVariant);
+    }
   }
 
   public static T RegisterOnResizeAction<T>(T control, Action resizeAction) where T : Control {
@@ -53,12 +67,17 @@ public abstract class CanvasComponentBase : ComponentBase {
 
   // --- Control initializers ---
   protected Button AddButton(string text, Action<RoutedEventArgs> onClick) => AddButton(text).OnClick(onClick);
-  protected Button AddButton(string text) => Add(new Button()).Content(text);
+  protected Button AddButton(string text) {
+    return Add(new Button())
+        .Content(text)
+        .MinWidth(CustomStyle.MinWidth)
+        .HorizontalContentAlignment(HorizontalAlignment.Center);
+  }
 
   protected TextBox AddMultilineTextBox(string text) => AddMultilineTextBox().Text(text);
   protected TextBox AddMultilineTextBox() => AddTextBox().AcceptsReturn(true).AcceptsTab(true);
   protected TextBox AddTextBox(string text) => AddTextBox().Text(text);
-  protected TextBox AddTextBox() => Add(new TextBox());
+  protected TextBox AddTextBox() => Add(new TextBox()).MinWidth(CustomStyle.MinWidth);
 
   protected CheckBox AddCheckBox(string text, Action<RoutedEventArgs> onIsCheckedChanged) {
     var checkBox = AddCheckBox(text);
@@ -89,7 +108,7 @@ public abstract class CanvasComponentBase : ComponentBase {
   }
   protected ExtendedComboBox<string> AddComboBox(IEnumerable<string> items) => AddComboBox(items, i => i);
   protected ExtendedComboBox<T> AddComboBox<T>(IEnumerable<T> items, Func<T, string> contentFunc) where T : class {
-    var comboBox = Add(new ExtendedComboBox<T>()).WithItems(items, contentFunc);
+    var comboBox = Add(new ExtendedComboBox<T>()).WithItems(items, contentFunc).MinWidth(CustomStyle.MinWidth);
     if (comboBox.Items.Count > 0) {
       comboBox.SelectedIndex = 0;
     }
@@ -119,7 +138,7 @@ public abstract class CanvasComponentBase : ComponentBase {
 
   protected T Add<T>(T control) where T : Control {
     Canvas.Children.Add(control);
-    return control.Ref();
+    return control.Ref().Margin(CustomStyle.Margin);
   }
 }
 

@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.LogicalTree;
 using Avalonia.Markup.Declarative;
 using Avalonia.Themes.Fluent;
 using System.Reflection;
@@ -49,10 +50,20 @@ public static class AppBuilderExtensions {
     builder.SetupWithLifetime(lifetime);
 
     if (!builder.Instance?.Styles.Any() ?? false) {
+      // builder.Instance.Styles.Add(new StyleInclude(new Uri("avares://Semi.Avalonia/Themes/")) {
+      //     Source = new Uri("avares://Semi.Avalonia/Themes/Index.axaml")
+      // });
       builder.Instance.Styles.Add(new FluentTheme());
     }
 
     lifetime.MainWindow = windowFunc();
+    lifetime.MainWindow.OnActualThemeVariantChanged(() => {
+      foreach (var child in lifetime.MainWindow.GetLogicalChildren()) {
+        if (child is CanvasComponentBase canvasComponent) {
+          canvasComponent.SetupThemeColours();
+        }
+      }
+    });
     lifetime.Start(Array.Empty<string>());
 
     if (builder.Instance is null) {
