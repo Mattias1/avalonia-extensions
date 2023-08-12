@@ -136,6 +136,13 @@ public abstract class CanvasComponentBase : ComponentBase {
   protected Image AddImage(Bitmap bitmap) => AddImage().Source(bitmap);
   protected Image AddImage() => Add(new Image());
 
+  protected Separator AddSeparator() {
+    var separator = Add(new Separator());
+    var originalMargin = separator.Margin;
+    separator.Margin(originalMargin.Left * 2, originalMargin.Top, originalMargin.Right * 2, originalMargin.Bottom);
+    return separator;
+  }
+
   protected T Add<T>(T control) where T : Control {
     Canvas.Children.Add(control);
     return control.Ref().Margin(CustomStyle.Margin);

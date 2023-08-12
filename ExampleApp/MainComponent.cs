@@ -28,7 +28,8 @@ public class MainComponent : CanvasComponentBase {
     AddCheckBox("Check 2", AddTextIfChecked("Checkbox two")).RightOf();
     AddCheckBox("Check 1", AddTextIfChecked("Checkbox one")).Above();
 
-    _tb.StretchRightInPanel().StretchDownTo(radioLeft1);
+    var separator = AddSeparator().Above(radioLeft1).StretchRightInPanel();
+    _tb.StretchRightInPanel().StretchDownTo(separator);
 
     // Some extra buttons to show off
     AddButton("CL").CenterLeftInPanel();
