@@ -24,6 +24,9 @@ public static class CanvasControlExtensions {
   public static double GetX(this Control control) => Canvas.GetLeft(control);
   public static double GetY(this Control control) => Canvas.GetTop(control);
 
+  public static double GetWidth(this Control ctrl) => double.IsNaN(ctrl.Width) ? ctrl.Bounds.Width : ctrl.Width;
+  public static double GetHeight(this Control ctrl) => double.IsNaN(ctrl.Height) ? ctrl.Bounds.Height : ctrl.Height;
+
   // --- Position relative to other controls ---
   public static T RightOf<T>(this T control) where T : Control => control.RightOf(LastReferencedOrThrow);
   public static T LeftOf<T>(this T control) where T : Control => control.LeftOf(LastReferencedOrThrow);
@@ -79,22 +82,22 @@ public static class CanvasControlExtensions {
   // --- Positioning of individual coordinates ---
   public static T XLeftOf<T>(this T control, Control other) where T : Control {
     return CanvasComponentBase.RegisterOnResizeAction(control,
-        () => control.Left(other.GetX() - control.Bounds.Width - control.Margin.Right));
+        () => control.Left(other.GetX() - control.GetWidth() - control.Margin.Right));
   }
   public static T XAlignLeft<T>(this T control, Control other) where T : Control {
     return CanvasComponentBase.RegisterOnResizeAction(control, () => control.Left(other.GetX()));
   }
   public static T XCenter<T>(this T control, Control other) where T : Control {
     return CanvasComponentBase.RegisterOnResizeAction(control,
-        () => control.Left(other.GetX() + (other.Bounds.Width - control.Bounds.Width) * .5));
+        () => control.Left(other.GetX() + (other.GetWidth() - control.GetWidth()) * .5));
   }
   public static T XAlignRight<T>(this T control, Control other) where T : Control {
     return CanvasComponentBase.RegisterOnResizeAction(control,
-        () => control.Left(other.GetX() + other.Bounds.Width - control.Bounds.Width));
+        () => control.Left(other.GetX() + other.GetWidth() - control.GetWidth()));
   }
   public static T XRightOf<T>(this T control, Control other) where T : Control {
     return CanvasComponentBase.RegisterOnResizeAction(control,
-        () => control.Left(other.GetX() + other.Bounds.Width + other.Margin.Left));
+        () => control.Left(other.GetX() + other.GetWidth() + other.Margin.Left));
   }
 
   public static T XLeftInPanel<T>(this T control) where T : Control {
@@ -103,19 +106,19 @@ public static class CanvasControlExtensions {
   public static T XCenterInPanel<T>(this T control) where T : Control {
     return CanvasComponentBase.RegisterOnResizeAction(control, () => {
       var canvas = CanvasComponentBase.FindCanvas(control);
-      control.Left((canvas.Bounds.Width - control.Bounds.Width - control.Margin.Left - control.Margin.Right) * .5);
+      control.Left((canvas.GetWidth() - control.GetWidth() - control.Margin.Left - control.Margin.Right) * .5);
     });
   }
   public static T XRightInPanel<T>(this T control) where T : Control {
     return CanvasComponentBase.RegisterOnResizeAction(control, () => {
       var canvas = CanvasComponentBase.FindCanvas(control);
-      control.Left(canvas.Bounds.Width - control.Bounds.Width - control.Margin.Left - control.Margin.Right);
+      control.Left(canvas.GetWidth() - control.GetWidth() - control.Margin.Left - control.Margin.Right);
     });
   }
 
   public static T YAbove<T>(this T control, Control other) where T : Control {
     return CanvasComponentBase.RegisterOnResizeAction(control, () => {
-      control.Top(other.GetY() - control.Bounds.Height - control.Margin.Bottom);
+      control.Top(other.GetY() - control.GetHeight() - control.Margin.Bottom);
     });
   }
   public static T YAlignTop<T>(this T control, Control other) where T : Control {
@@ -123,15 +126,15 @@ public static class CanvasControlExtensions {
   }
   public static T YCenter<T>(this T control, Control other) where T : Control {
     return CanvasComponentBase.RegisterOnResizeAction(control,
-        () => control.Top(other.GetY() + (other.Bounds.Height - control.Bounds.Height) * .5));
+        () => control.Top(other.GetY() + (other.GetHeight() - control.GetHeight()) * .5));
   }
   public static T YAlignBottom<T>(this T control, Control other) where T : Control {
     return CanvasComponentBase.RegisterOnResizeAction(control,
-        () => control.Top(other.GetY() + other.Bounds.Height - control.Bounds.Height));
+        () => control.Top(other.GetY() + other.GetHeight() - control.GetHeight()));
   }
   public static T YBelow<T>(this T control, Control other) where T : Control {
     return CanvasComponentBase.RegisterOnResizeAction(control,
-        () => control.Top(other.GetY() + other.Bounds.Height + other.Margin.Top));
+        () => control.Top(other.GetY() + other.GetHeight() + other.Margin.Top));
   }
 
   public static T YTopInPanel<T>(this T control) where T : Control {
@@ -140,13 +143,13 @@ public static class CanvasControlExtensions {
   public static T YCenterInPanel<T>(this T control) where T : Control {
     return CanvasComponentBase.RegisterOnResizeAction(control, () => {
       var canvas = CanvasComponentBase.FindCanvas(control);
-      control.Top((canvas.Bounds.Height - control.Bounds.Height - control.Margin.Top - control.Margin.Bottom) * .5);
+      control.Top((canvas.GetHeight() - control.GetHeight() - control.Margin.Top - control.Margin.Bottom) * .5);
     });
   }
   public static T YBottomInPanel<T>(this T control) where T : Control {
     return CanvasComponentBase.RegisterOnResizeAction(control, () => {
       var canvas = CanvasComponentBase.FindCanvas(control);
-      control.Top(canvas.Bounds.Height - control.Bounds.Height - control.Margin.Top - control.Margin.Bottom);
+      control.Top(canvas.GetHeight() - control.GetHeight() - control.Margin.Top - control.Margin.Bottom);
     });
   }
 
@@ -166,13 +169,28 @@ public static class CanvasControlExtensions {
   public static T StretchRightInPanel<T>(this T control) where T : Control {
     return CanvasComponentBase.RegisterOnResizeAction(control, () => {
       var canvas = CanvasComponentBase.FindCanvas(control);
-      control.Width(canvas.Bounds.Width - control.GetX() - control.Margin.Left - control.Margin.Right);
+      control.Width(canvas.GetWidth() - control.GetX() - control.Margin.Left - control.Margin.Right);
     });
   }
   public static T StretchDownInPanel<T>(this T control) where T : Control {
     return CanvasComponentBase.RegisterOnResizeAction(control, () => {
       var canvas = CanvasComponentBase.FindCanvas(control);
-      control.Height(canvas.Bounds.Height - control.GetY() - control.Margin.Top - control.Margin.Bottom);
+      control.Height(canvas.GetHeight() - control.GetY() - control.Margin.Top - control.Margin.Bottom);
+    });
+  }
+
+  public static T StretchFractionRightInPanel<T>(this T control, int numerator, int denominator) where T : Control {
+    return CanvasComponentBase.RegisterOnResizeAction(control, () => {
+      var canvas = CanvasComponentBase.FindCanvas(control);
+      var fullWidth = canvas.GetWidth() - control.GetX() - control.Margin.Left - control.Margin.Right;
+      control.Width(fullWidth * numerator / denominator - control.Margin.Right * .5f);
+    });
+  }
+  public static T StretchFractionDownInPanel<T>(this T control, int numerator, int denominator) where T : Control {
+    return CanvasComponentBase.RegisterOnResizeAction(control, () => {
+      var canvas = CanvasComponentBase.FindCanvas(control);
+      var fullHeight = canvas.GetHeight() - control.GetY() - control.Margin.Top - control.Margin.Bottom;
+      control.Height(fullHeight * numerator / denominator - control.Margin.Bottom * .5f);
     });
   }
 }

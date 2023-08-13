@@ -36,11 +36,15 @@ public class MainComponent : CanvasComponentBase {
     var cr = AddButton("CR").CenterRightInPanel();
     AddButton("BC").BottomCenterInPanel();
 
-    var cc = AddButton("CC").CenterInPanel();
-    AddButton("CC T").Above(cc);
-    AddButton("CC L ==").LeftOf(cc).StretchDownInPanel();
-    AddButton("CC R ==").RightOf(cc).StretchRightTo(cr);
-    AddButton("CC B").Below(cc);
+    var c = AddButton("CC").CenterInPanel();
+    AddButton("C T").Above(c);
+    AddButton("C L 1/2").LeftOf(c).StretchFractionDownInPanel(1, 2);
+    AddButton("1/4").Below().StretchFractionDownInPanel(1, 2);
+    AddButton("1/4").Below().StretchDownInPanel();
+    AddButton("C R stretch").RightOf(c).StretchRightTo(cr);
+    AddButton("C B").Below(c);
+    AddButton("2/3").RightOf().StretchFractionRightInPanel(2, 3);
+    AddButton("1/3").RightOf().StretchRightInPanel();
   }
 
   private Action<RoutedEventArgs> AddText(string text) => _ => _tb.Text += $"{text}\n";

@@ -137,10 +137,9 @@ public abstract class CanvasComponentBase : ComponentBase {
   protected Image AddImage() => Add(new Image());
 
   protected Separator AddSeparator() {
-    var separator = Add(new Separator());
-    var originalMargin = separator.Margin;
-    separator.Margin(originalMargin.Left * 2, originalMargin.Top, originalMargin.Right * 2, originalMargin.Bottom);
-    return separator;
+    var control = Add(new Separator());
+    control.Margin(control.Margin.Left * 2, control.Margin.Top, control.Margin.Right * 2, control.Margin.Bottom);
+    return control;
   }
 
   protected T Add<T>(T control) where T : Control {
