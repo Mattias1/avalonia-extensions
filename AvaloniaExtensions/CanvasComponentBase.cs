@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Markup.Declarative;
@@ -45,24 +46,36 @@ public abstract class CanvasComponentBase : ComponentBase {
   }
 
   public static T RegisterOnResizeAction<T>(T control, Action resizeAction) where T : Control {
-    var canvasComponent = FindComponent(control);
+    var canvasComponent = FindCanvasComponent(control);
     canvasComponent.RegisterOnResizeAction(resizeAction);
     return control;
   }
   public void RegisterOnResizeAction(Action resizeAction) => _resizeActions.Add(resizeAction);
 
-  public static CanvasComponentBase FindComponent(StyledElement? element) {
+  public void SwitchToComponent<T>() {
+    FindComponent<ExtendedWindow>(this).SwitchToComponent<T>();
+  }
+
+  public void Quit() {
+    if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktopApp) {
+      throw new InvalidOperationException("This method only works for desktop applications");
+    }
+    desktopApp.Shutdown();
+  }
+
+  public static CanvasComponentBase FindCanvasComponent(StyledElement? element) {
     // Unfortunately Canvas.Parent is null during initialization, so we have to find another way
     var canvas = FindCanvas(element);
     return CANVAS_COMPONENT_DICTIONARY[canvas];
   }
-  public static Canvas FindCanvas(StyledElement? element) {
+  public static Canvas FindCanvas(StyledElement? element) => FindComponent<Canvas>(element);
+  public static T FindComponent<T>(StyledElement? element) {
     while ((element = element?.Parent) is not null) {
-      if (element is Canvas result) {
+      if (element is T result) {
         return result;
       }
     }
-    throw new InvalidOperationException("Cannot find parent of type Canvas");
+    throw new InvalidOperationException($"Cannot find parent of type {typeof(T)}");
   }
 
   // --- Control initializers ---

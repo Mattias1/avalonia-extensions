@@ -14,31 +14,16 @@ public static class AppBuilderExtensions {
   public static AppBuilder Init() => AppBuilder.Configure<Application>().UsePlatformDetect();
 
   public static Application StartDesktopApp(this AppBuilder builder, string windowTitle, Func<ViewBase> contentFunc) {
-    return builder.StartDesktopApp(() => new Window()
-        .Title(windowTitle)
-        .Content(contentFunc()));
+    return builder.StartDesktopApp(() => ExtendedWindow.Init(windowTitle, contentFunc()));
   }
   public static Application StartDesktopApp(this AppBuilder builder, string windowTitle, Func<ViewBase> contentFunc,
       Size size) {
-    return builder.StartDesktopApp(() => new Window()
-        .Title(windowTitle)
-        .Content(contentFunc())
-        .Width(size.Width)
-        .Height(size.Height));
+    return builder.StartDesktopApp(() => ExtendedWindow.Init(windowTitle, contentFunc()).WithSize(size));
   }
 
   public static Application StartDesktopApp(this AppBuilder builder, string windowTitle, Func<ViewBase> contentFunc,
       Size size, Size minSize) {
-    return builder.StartDesktopApp(() => {
-      var window = new Window()
-          .Title(windowTitle)
-          .Content(contentFunc())
-          .Width(size.Width)
-          .Height(size.Height);
-      window.MinWidth = minSize.Width;
-      window.MinHeight = minSize.Height;
-      return window;
-    });
+    return builder.StartDesktopApp(() => ExtendedWindow.Init(windowTitle, contentFunc()).WithSize(size, minSize));
   }
 
   public static Application StartDesktopApp(this AppBuilder builder, Func<Window> windowFunc) {

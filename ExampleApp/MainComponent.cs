@@ -13,13 +13,14 @@ public class MainComponent : CanvasComponentBase {
     var btnHelloWorld = AddButton("Hello world", AddText("Whazzup folks, watcha doing?")).TopLeftInPanel();
     _tb = AddMultilineTextBox().Below(btnHelloWorld);
     InsertLabelLeftOf("Say:", btnHelloWorld);
+    AddButton("Clear", ClearText()).RightOf(btnHelloWorld);
+
     AddComboBox(new [] { "item1", "item2", "item3" }, AddSelectedText).TopRightInPanel();
     AddLabelLeftOf("Select:");
 
     AddImage(AppBuilderExtensions.StartupPath + "/assets/smiley.png").TopCenterInPanel().YCenter(btnHelloWorld);
 
-    AddButton("Cancel", ClearText()).BottomRightInPanel();
-    AddButton("Ok", AddText("kk")).LeftOf();
+    AddButton("Settings", _ => SwitchToComponent<SettingsComponent>()).BottomRightInPanel();
 
     AddRadio("r-group-1", "Left 2", AddTextIfChecked("Left radio two")).BottomLeftInPanel();
     var radioLeft1 = AddRadio("r-group-1", "Left 1", AddTextIfChecked("Left radio one")).Above();
@@ -31,7 +32,7 @@ public class MainComponent : CanvasComponentBase {
     var separator = AddSeparator().Above(radioLeft1).StretchRightInPanel();
     _tb.StretchRightInPanel().StretchDownTo(separator);
 
-    // Some extra buttons to show off
+    // Some extra buttons to show off / test positioning and sizing
     AddButton("CL").CenterLeftInPanel();
     var cr = AddButton("CR").CenterRightInPanel();
     AddButton("BC").BottomCenterInPanel();
