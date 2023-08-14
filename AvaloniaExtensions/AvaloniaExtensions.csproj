@@ -1,6 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <PackageId>Mattias1.AvaloniaExtensions</PackageId>
+    <Description>Some extensions to quickly build Avalonia UI desktop applications without needing XAML.</Description>
+    <AssemblyTitle>Avalonia Extensions</AssemblyTitle>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -8,6 +11,11 @@
     <!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
     <TrimMode>copyused</TrimMode>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/Mattias1/avalonia-extensions</RepositoryUrl>
+    <PackageTags>avaloniaui;avalonia;gui</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +35,10 @@
   <ItemGroup>
     <ProjectReference Include="..\lib\Avalonia.Markup.Declarative\src\Avalonia.Markup.Declarative\Avalonia.Markup.Declarative.csproj" />
     <ProjectReference Include="..\..\Avalonia.Markup.Declarative.SourceGenerator\Avalonia.Markup.Declarative.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
 </Project>
