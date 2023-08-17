@@ -1,6 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Declarative;
+using System;
+using System.Collections.Generic;
 
 namespace AvaloniaExtensions;
 

@@ -5,6 +5,8 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Markup.Declarative;
 using Avalonia.Media.Imaging;
+using System;
+using System.Collections.Generic;
 
 namespace AvaloniaExtensions;
 

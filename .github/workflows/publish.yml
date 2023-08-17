@@ -19,6 +19,11 @@ jobs:
         with:
           repository: AvaloniaUI/Avalonia.Markup.Declarative
           path: lib/Avalonia.Markup.Declarative
+      - name: Copy Avalonia.Markup.Declarative lib files
+        run: >
+          cp
+          lib/Avalonia.Markup.Declarative/src/Avalonia.Markup.Declarative/*.cs
+          AvaloniaExtensions/lib/Avalonia.Markup.Declarative/
 
       - name: Setup dotnet sdk
         uses: actions/setup-dotnet@v3

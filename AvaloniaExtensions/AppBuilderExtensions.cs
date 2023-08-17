@@ -4,6 +4,9 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Declarative;
 using Avalonia.Themes.Fluent;
+using System;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace AvaloniaExtensions;
