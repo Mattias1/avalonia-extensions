@@ -5,14 +5,12 @@ using Avalonia.LogicalTree;
 using Avalonia.Markup.Declarative;
 using Avalonia.Themes.Fluent;
 using System;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace AvaloniaExtensions;
 
 public static class AppBuilderExtensions {
-  public static string? StartupPath => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+  public static string? StartupPath => AssetExtensions.StartupPath;
 
   public static AppBuilder Init() => AppBuilder.Configure<Application>().UsePlatformDetect();
 

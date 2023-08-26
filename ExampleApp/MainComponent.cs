@@ -18,7 +18,7 @@ public class MainComponent : CanvasComponentBase {
     AddComboBox(new [] { "item1", "item2", "item3" }, AddSelectedText).TopRightInPanel();
     AddLabelLeftOf("Select:");
 
-    AddImage(AppBuilderExtensions.StartupPath + "/assets/smiley.png").TopCenterInPanel().YCenter(btnHelloWorld);
+    AddImage(AssetExtensions.LoadBitmap("assets/smiley.png")).TopCenterInPanel().YCenter(btnHelloWorld);
 
     AddButton("Settings", _ => SwitchToComponent<SettingsComponent>()).BottomRightInPanel();
 

@@ -20,6 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AvaloniaResource Include="assets\**"/>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.0.3" />
     <PackageReference Include="Avalonia.Desktop" Version="11.0.3" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
@@ -27,12 +31,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AvaloniaExtensions\AvaloniaExtensions.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="assets\smiley.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
