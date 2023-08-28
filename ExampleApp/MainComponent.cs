@@ -21,6 +21,7 @@ public class MainComponent : CanvasComponentBase {
     AddImage(AssetExtensions.LoadBitmap("assets/smiley.png")).TopCenterInPanel().YCenter(btnHelloWorld);
 
     AddButton("Settings", _ => SwitchToComponent<SettingsComponent>()).BottomRightInPanel();
+    AddButton("Quit", _ => Quit()).LeftOf();
 
     AddRadio("r-group-1", "Left 2", AddTextIfChecked("Left radio two")).BottomLeftInPanel();
     var radioLeft1 = AddRadio("r-group-1", "Left 1", AddTextIfChecked("Left radio one")).Above();

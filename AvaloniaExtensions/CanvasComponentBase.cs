@@ -58,6 +58,10 @@ public abstract class CanvasComponentBase : ComponentBase {
     FindComponent<ExtendedWindow>(this).SwitchToComponent<T>();
   }
 
+  public T GetSettings<T>() where T : class {
+    return FindComponent<ExtendedWindow>(this).GetSettings<T>();
+  }
+
   public void Quit() {
     if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktopApp) {
       throw new InvalidOperationException("This method only works for desktop applications");
