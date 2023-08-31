@@ -8,7 +8,7 @@ using System.Reflection;
 namespace AvaloniaExtensions;
 
 public static class AssetExtensions {
-  public static string? StartupPath => Path.GetDirectoryName(GetAssembly().Location);
+  public static string StartupPath => AppContext.BaseDirectory;
 
   public static WindowIcon LoadWindowIcon(string relativePath) => new WindowIcon(LoadResource(relativePath));
   public static Bitmap LoadBitmap(string relativePath) => new Bitmap(LoadResource(relativePath));

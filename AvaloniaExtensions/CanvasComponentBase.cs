@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Markup.Declarative;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using System;
 using System.Collections.Generic;
@@ -54,13 +55,9 @@ public abstract class CanvasComponentBase : ComponentBase {
   }
   public void RegisterOnResizeAction(Action resizeAction) => _resizeActions.Add(resizeAction);
 
-  public void SwitchToComponent<T>() {
-    FindComponent<ExtendedWindow>(this).SwitchToComponent<T>();
-  }
+  public void SwitchToComponent<T>() => FindWindow().SwitchToComponent<T>();
 
-  public T GetSettings<T>() where T : class {
-    return FindComponent<ExtendedWindow>(this).GetSettings<T>();
-  }
+  public T GetSettings<T>() where T : class => FindWindow().GetSettings<T>();
 
   public void Quit() {
     if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktopApp) {
@@ -69,6 +66,7 @@ public abstract class CanvasComponentBase : ComponentBase {
     desktopApp.Shutdown();
   }
 
+  public ExtendedWindow FindWindow() => FindComponent<ExtendedWindow>(this);
   public static CanvasComponentBase FindCanvasComponent(StyledElement? element) {
     // Unfortunately Canvas.Parent is null during initialization, so we have to find another way
     var canvas = FindCanvas(element);
@@ -96,7 +94,7 @@ public abstract class CanvasComponentBase : ComponentBase {
   protected TextBox AddMultilineTextBox(string text) => AddMultilineTextBox().Text(text);
   protected TextBox AddMultilineTextBox() => AddTextBox().AcceptsReturn(true).AcceptsTab(true);
   protected TextBox AddTextBox(string text) => AddTextBox().Text(text);
-  protected TextBox AddTextBox() => Add(new TextBox()).MinWidth(CustomStyle.MinWidth);
+  protected TextBox AddTextBox() => Add(new TextBox()).MinWidth(CustomStyle.MinWidth * 2);
 
   protected CheckBox AddCheckBox(string text, Action<RoutedEventArgs> onIsCheckedChanged) {
     var checkBox = AddCheckBox(text);
@@ -138,16 +136,25 @@ public abstract class CanvasComponentBase : ComponentBase {
   protected Label AddLabelRightOf(string text, Control target) => AddLabel(text, target).XRightOf(target).YCenter(target);
   protected Label AddLabelLeftOf(string text) => AddLabelLeftOf(text, CanvasControlExtensions.CurrentReferencedOrThrow);
   protected Label AddLabelLeftOf(string text, Control target) => AddLabel(text, target).XLeftOf(target).YCenter(target);
-  protected Label InsertLabelLeftOf(string text) {
-    return InsertLabelLeftOf(text, CanvasControlExtensions.CurrentReferencedOrThrow);
+  protected Label InsertLabelAbove(string text) {
+    return InsertLabelAbove(text, CanvasControlExtensions.CurrentReferencedOrThrow);
   }
-  protected Label InsertLabelLeftOf(string text, Control target) {
-    var label = AddLabel(text, target).XAlignLeft(target).YCenter(target);
+  protected Label InsertLabelAbove(string text, Control target) {
+    var label = AddLabel(text, target).XAlignLeft(target).YAlignTop(target);
+    target.YBelow(label);
+    return label;
+  }
+  protected Label InsertLabelLeftOf(string text, double width = double.NaN) {
+    return InsertLabelLeftOf(text, CanvasControlExtensions.CurrentReferencedOrThrow, width);
+  }
+  protected Label InsertLabelLeftOf(string text, Control target, double width = double.NaN) {
+    var label = AddLabel(text, target).XAlignLeft(target).YCenter(target).Width(width);
     target.XRightOf(label);
     return label;
   }
   protected Label AddLabel(string text, Control target) => Add(new Label()).Content(text).Target(target);
 
+  protected TextBlock AddTextBlockHeader(string text) => AddTextBlock(text).FontSize(20).FontWeight(FontWeight.Bold);
   protected TextBlock AddTextBlock(string text) => Add(new TextBlock()).Text(text);
 
   protected Image AddImage(int width, int height) => AddImage().Width(width).Height(height);

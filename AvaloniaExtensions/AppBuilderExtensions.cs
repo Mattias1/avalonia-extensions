@@ -10,7 +10,7 @@ using System.Linq;
 namespace AvaloniaExtensions;
 
 public static class AppBuilderExtensions {
-  public static string? StartupPath => AssetExtensions.StartupPath;
+  public static string StartupPath => AssetExtensions.StartupPath;
 
   public static AppBuilder Init() => AppBuilder.Configure<Application>().UsePlatformDetect();
 
