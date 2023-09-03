@@ -51,6 +51,11 @@ public abstract class CanvasComponentBase : ComponentBase {
     }
   }
 
+  internal T SetInitialControlToFocus<T>(T control) where T : Control {
+    InitialControlToFocus = control;
+    return control;
+  }
+
   public static T RegisterOnResizeAction<T>(T control, Action resizeAction) where T : Control {
     var canvasComponent = FindCanvasComponent(control);
     canvasComponent.RegisterOnResizeAction(resizeAction);

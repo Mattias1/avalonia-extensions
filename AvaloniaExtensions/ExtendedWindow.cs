@@ -9,11 +9,16 @@ using System.Text.Json;
 namespace AvaloniaExtensions;
 
 public sealed class ExtendedWindow : Window {
+  // Unfortunately CanvasComponentBase.Parent is null during initialization, so we have to find another way
+  private static ExtendedWindow? _windowObject;
+  public static ExtendedWindow Get => _windowObject ?? throw new InvalidOperationException("No window created yet.");
+
   private readonly Dictionary<Type, ViewBase> _components;
   private readonly Dictionary<Type, Func<ViewBase>> _lazyComponents;
   private readonly Dictionary<Type, SettingsFile> _settingsFiles;
 
   private ExtendedWindow() {
+    _windowObject = this;
     _components = new Dictionary<Type, ViewBase>();
     _lazyComponents = new Dictionary<Type, Func<ViewBase>>();
     _settingsFiles = new Dictionary<Type, SettingsFile>();

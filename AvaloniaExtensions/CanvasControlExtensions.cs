@@ -21,6 +21,11 @@ public static class CanvasControlExtensions {
     return control;
   }
 
+  // --- Misc ---
+  public static T WithInitialFocus<T>(this T control) where T : Control {
+    return CanvasComponentBase.FindCanvasComponent(control).SetInitialControlToFocus(control);
+  }
+
   // --- Basic position and size ---
   public static double GetX(this Control control) => Canvas.GetLeft(control);
   public static double GetY(this Control control) => Canvas.GetTop(control);

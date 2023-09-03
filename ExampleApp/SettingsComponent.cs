@@ -17,15 +17,13 @@ public class SettingsComponent : CanvasComponentBase {
     AddTextBlockHeader("Some settings").TopLeftInPanel();
     _cbExampleToggle = AddCheckBox("Something to toggle").Below();
     InsertLabelAbove("A label above, to show it off");
-    _tbExampleString = AddTextBox().Below(_cbExampleToggle);
+    _tbExampleString = AddTextBox().Below(_cbExampleToggle).WithInitialFocus();
     InsertLabelLeftOf("Checkbox:", _cbExampleToggle, LABEL_WIDTH);
     InsertLabelLeftOf("Text:", _tbExampleString, LABEL_WIDTH);
 
     AddButton("Reset defaults", OnResetSettingsClick).BottomLeftInPanel();
     AddButton("Cancel", OnCancelClick).BottomRightInPanel();
     AddButton("Ok", OnSaveClick).LeftOf();
-
-    InitialControlToFocus = _tbExampleString;
   }
 
   protected override void OnInitialized() {
