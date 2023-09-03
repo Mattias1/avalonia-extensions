@@ -24,6 +24,8 @@ public class SettingsComponent : CanvasComponentBase {
     AddButton("Reset defaults", OnResetSettingsClick).BottomLeftInPanel();
     AddButton("Cancel", OnCancelClick).BottomRightInPanel();
     AddButton("Ok", OnSaveClick).LeftOf();
+
+    InitialControlToFocus = _tbExampleString;
   }
 
   protected override void OnInitialized() {
@@ -31,14 +33,13 @@ public class SettingsComponent : CanvasComponentBase {
     LoadSettings();
   }
 
-  private void OnSaveClick(RoutedEventArgs e) {
-    Settings.ExampleToggle = _cbExampleToggle.IsChecked ?? false;
-    Settings.ExampleString = _tbExampleString.Text;
+  private void OnCancelClick(RoutedEventArgs e) {
+    LoadSettings();
     SwitchToComponent<MainComponent>();
   }
 
-  private void OnCancelClick(RoutedEventArgs e) {
-    LoadSettings();
+  private void OnSaveClick(RoutedEventArgs e) {
+    SaveSettings();
     SwitchToComponent<MainComponent>();
   }
 
@@ -51,6 +52,11 @@ public class SettingsComponent : CanvasComponentBase {
   private void LoadSettings() {
     _cbExampleToggle.IsChecked = Settings.ExampleToggle;
     _tbExampleString.Text = Settings.ExampleString;
+  }
+
+  private void SaveSettings() {
+    Settings.ExampleToggle = _cbExampleToggle.IsChecked ?? false;
+    Settings.ExampleString = _tbExampleString.Text;
   }
 
   public class ExampleSettings {

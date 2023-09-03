@@ -18,8 +18,10 @@ public abstract class CanvasComponentBase : ComponentBase {
   private readonly List<Action> _resizeActions = new List<Action>();
   protected Canvas Canvas { get; private set; } = null!; // This will be initialised before it's being used (hopefully :P)
 
-  public virtual CustomStyle CustomStyle => new CustomStyle(new Thickness(10), 80,
+  public CustomStyle CustomStyle { get; protected set; } = new CustomStyle(new Thickness(10), 80,
       ThemedBrushes.FromHex("FAFAFA", "363636"));
+
+  protected Control? InitialControlToFocus { get; set; }
 
   protected override object Build() {
     Canvas = new Canvas();
@@ -31,14 +33,15 @@ public abstract class CanvasComponentBase : ComponentBase {
   protected abstract void InitializeControls();
 
   protected override void OnSizeChanged(SizeChangedEventArgs e) {
-    foreach (var action in _resizeActions) {
-      action();
-    }
+    HandleResize();
     base.OnSizeChanged(e);
   }
 
+  protected void HandleResize() => _resizeActions.ForEach(action => action());
+
   protected override void OnLoaded(RoutedEventArgs e) {
     SetupThemeColours();
+    InitialControlToFocus?.Focus();
     base.OnLoaded(e);
   }
 
@@ -136,6 +139,10 @@ public abstract class CanvasComponentBase : ComponentBase {
   protected Label AddLabelRightOf(string text, Control target) => AddLabel(text, target).XRightOf(target).YCenter(target);
   protected Label AddLabelLeftOf(string text) => AddLabelLeftOf(text, CanvasControlExtensions.CurrentReferencedOrThrow);
   protected Label AddLabelLeftOf(string text, Control target) => AddLabel(text, target).XLeftOf(target).YCenter(target);
+  protected Label AddLabelAbove(string text) => AddLabelAbove(text, CanvasControlExtensions.CurrentReferencedOrThrow);
+  protected Label AddLabelAbove(string text, Control target) => AddLabel(text, target).Above(target);
+  protected Label AddLabelBelow(string text) => AddLabelBelow(text, CanvasControlExtensions.CurrentReferencedOrThrow);
+  protected Label AddLabelBelow(string text, Control target) => AddLabel(text, target).Below(target);
   protected Label InsertLabelAbove(string text) {
     return InsertLabelAbove(text, CanvasControlExtensions.CurrentReferencedOrThrow);
   }
