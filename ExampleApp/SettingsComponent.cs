@@ -42,7 +42,7 @@ public class SettingsComponent : CanvasComponentBase {
   }
 
   private void OnResetSettingsClick(RoutedEventArgs e) {
-    FindWindow().ResetSettings<ExampleSettings>();
+    SettingsFiles.Get.ResetSettings<ExampleSettings>();
     _settings = null;
     LoadSettings();
   }

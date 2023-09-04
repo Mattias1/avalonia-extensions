@@ -14,6 +14,31 @@ public static class AppBuilderExtensions {
 
   public static AppBuilder Init() => AppBuilder.Configure<Application>().UsePlatformDetect();
 
+  /// <summary>
+  /// Add a settings file. It'll save the settings file when closing the app.
+  /// </summary>
+  /// <param name="builder"></param>
+  /// <param name="path">The location of the settings file. You can use './filename.json' to save it in the apps dir.</param>
+  /// <typeparam name="T">The type of the settings class.</typeparam>
+  /// <returns></returns>
+  public static AppBuilder WithSettingsFile<T>(this AppBuilder builder, string path) where T : class, new() {
+    SettingsFiles.Get.AddSettingsFile(path, () => new T());
+    return builder;
+  }
+
+  /// <summary>
+  /// Add a settings file. It'll save the settings file when closing the app.
+  /// </summary>
+  /// <param name="builder"></param>
+  /// <param name="path">The location of the settings file. You can use './filename.json' to save it in the apps dir.</param>
+  /// <param name="constructorLambda">A lambda function to construct the settings object if it can't be loaded.</param>
+  /// <typeparam name="T">The type of the settings class.</typeparam>
+  /// <returns></returns>
+  public static AppBuilder WithSettingsFile<T>(this AppBuilder builder, string path, Func<T> constructorLambda) where T : class {
+    SettingsFiles.Get.AddSettingsFile(path, constructorLambda);
+    return builder;
+  }
+
   public static Application StartDesktopApp(this AppBuilder builder, string windowTitle, Func<ViewBase> contentFunc) {
     return builder.StartDesktopApp(() => ExtendedWindow.Init(windowTitle, contentFunc()));
   }
@@ -21,12 +46,10 @@ public static class AppBuilderExtensions {
       Size size) {
     return builder.StartDesktopApp(() => ExtendedWindow.Init(windowTitle, contentFunc()).WithSize(size));
   }
-
   public static Application StartDesktopApp(this AppBuilder builder, string windowTitle, Func<ViewBase> contentFunc,
       Size size, Size minSize) {
     return builder.StartDesktopApp(() => ExtendedWindow.Init(windowTitle, contentFunc()).WithSize(size, minSize));
   }
-
   public static Application StartDesktopApp(this AppBuilder builder, Func<Window> windowFunc) {
     // Note that despite it looks like this uses a builder pattern, the order of method- and constructor-calls matter
     var lifetime = new ClassicDesktopStyleApplicationLifetime() {

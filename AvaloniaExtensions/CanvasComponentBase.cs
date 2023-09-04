@@ -68,7 +68,7 @@ public abstract class CanvasComponentBase : ComponentBase {
 
   public void SwitchToComponent<T>() => FindWindow().SwitchToComponent<T>();
 
-  public T GetSettings<T>() where T : class => FindWindow().GetSettings<T>();
+  public T GetSettings<T>() where T : class => SettingsFiles.Get.GetSettings<T>();
 
   public void Quit() {
     if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktopApp) {

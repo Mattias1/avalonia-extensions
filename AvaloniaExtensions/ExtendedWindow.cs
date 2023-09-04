@@ -3,8 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Markup.Declarative;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
 
 namespace AvaloniaExtensions;
 
@@ -15,13 +13,13 @@ public sealed class ExtendedWindow : Window {
 
   private readonly Dictionary<Type, ViewBase> _components;
   private readonly Dictionary<Type, Func<ViewBase>> _lazyComponents;
-  private readonly Dictionary<Type, SettingsFile> _settingsFiles;
+
+  public SettingsFiles SettingsFiles => SettingsFiles.Get;
 
   private ExtendedWindow() {
     _windowObject = this;
     _components = new Dictionary<Type, ViewBase>();
     _lazyComponents = new Dictionary<Type, Func<ViewBase>>();
-    _settingsFiles = new Dictionary<Type, SettingsFile>();
   }
 
   // --- Miscellaneous functions ---
@@ -74,7 +72,7 @@ public sealed class ExtendedWindow : Window {
 
   // --- Settings files ---
   protected override void OnClosing(WindowClosingEventArgs e) {
-    SaveSettings();
+    SettingsFiles.SaveSettings();
     base.OnClosing(e);
   }
 
@@ -85,7 +83,8 @@ public sealed class ExtendedWindow : Window {
   /// <typeparam name="T">The type of the settings class.</typeparam>
   /// <returns></returns>
   public ExtendedWindow WithSettingsFile<T>(string path) where T : class, new() {
-    return WithSettingsFile(path, () => new T());
+    SettingsFiles.AddSettingsFile(path, () => new T());
+    return this;
   }
 
   /// <summary>
@@ -96,68 +95,8 @@ public sealed class ExtendedWindow : Window {
   /// <typeparam name="T">The type of the settings class.</typeparam>
   /// <returns></returns>
   public ExtendedWindow WithSettingsFile<T>(string path, Func<T> constructorLambda) where T : class {
-    var settings = LoadOrCreateSettings(path, constructorLambda);
-    _settingsFiles.Add(typeof(T), new SettingsFile(path, settings));
+    SettingsFiles.AddSettingsFile(path, constructorLambda);
     return this;
-  }
-
-  private T LoadOrCreateSettings<T>(string path, Func<T> constructorLambda) where T : class {
-    try {
-      using var stream = File.OpenRead(CompletePath(path));
-      var result = JsonSerializer.Deserialize<T>(stream);
-      return result ?? constructorLambda();
-    } catch (Exception e) {
-      Console.Error.WriteLine("An avalonia extensions app encountered an error while loading a settings file." +
-          $"Settings type: '{typeof(T)}', error: '{e.Message}'.");
-      return constructorLambda();
-    }
-  }
-
-  public bool SaveSettings() {
-    bool allSavedSuccessfully = true;
-    foreach (var (type, settingsFile) in _settingsFiles) {
-      try {
-        using var stream = File.Create(CompletePath(settingsFile.Path));
-        JsonSerializer.Serialize(stream, settingsFile.Settings);
-      } catch (Exception e) {
-        allSavedSuccessfully = false;
-        Console.Error.WriteLine("An avalonia extensions app encountered an error while saving a settings file." +
-            $"Settings type: '{type}', error: '{e.Message}'.");
-      }
-    }
-    return allSavedSuccessfully;
-  }
-
-  private string CompletePath(string path) {
-    if (string.IsNullOrWhiteSpace(path)) {
-      path = "./settings.json";
-    }
-    if (path.Substring(0, 2) == "./") {
-      path = AssetExtensions.StartupPath + path.Substring(1);
-    }
-    return path;
-  }
-
-  public void ResetSettings<T>() where T : class, new() => OverwriteSettings(new T());
-  public void ResetSettings<T>(Func<T> constructorLambda) where T : class => OverwriteSettings(constructorLambda());
-
-  public void OverwriteSettings<T>(T settings) where T : class {
-    if (!_settingsFiles.TryGetValue(typeof(T), out SettingsFile? originalSettingsFile)) {
-      throw new InvalidOperationException($"Cannot find settings with type {typeof(T)}. "
-          + $"You can add it with the '{nameof(WithSettingsFile)}' method.");
-    }
-    _settingsFiles[typeof(T)] = originalSettingsFile with { Settings = settings };
-  }
-
-  public T GetSettings<T>() where T : class {
-    if (!_settingsFiles.TryGetValue(typeof(T), out SettingsFile? settingsFile)) {
-      throw new InvalidOperationException($"Cannot find settings with type {typeof(T)}. "
-          + $"You can add it with the '{nameof(WithSettingsFile)}' method.");
-    }
-    if (settingsFile.Settings is not T settings) {
-      throw new InvalidOperationException($"Cannot cast settings with type {typeof(T)} to its type, weird.");
-    }
-    return settings;
   }
 
   // --- Initialisation ---
@@ -172,6 +111,4 @@ public sealed class ExtendedWindow : Window {
     window.Title = windowTitle;
     return window;
   }
-
-  private record SettingsFile(string Path, object Settings);
 }
