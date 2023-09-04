@@ -161,9 +161,14 @@ public sealed class ExtendedWindow : Window {
   }
 
   // --- Initialisation ---
-  public static ExtendedWindow Init<T>(string windowTitle) where T : ViewBase, new() => Init(windowTitle, new T());
+  public static ExtendedWindow Init<T>(string windowTitle) where T : ViewBase, new() {
+    return Init(windowTitle, () => new T());
+  }
   public static ExtendedWindow Init<T>(string windowTitle, T initialComponent) where T : ViewBase {
-    var window = new ExtendedWindow().AddInitialComponent(initialComponent);
+    return Init(windowTitle, () => initialComponent);
+  }
+  public static ExtendedWindow Init<T>(string windowTitle, Func<T> initialComponentConstructor) where T : ViewBase {
+    var window = new ExtendedWindow().AddInitialComponent(initialComponentConstructor());
     window.Title = windowTitle;
     return window;
   }

@@ -42,6 +42,9 @@ public abstract class CanvasComponentBase : ComponentBase {
   protected override void OnLoaded(RoutedEventArgs e) {
     SetupThemeColours();
     InitialControlToFocus?.Focus();
+    if (InitialControlToFocus is TextBox textBox) {
+      textBox.CaretIndex = textBox.Text?.Length ?? 0;
+    }
     base.OnLoaded(e);
   }
 
