@@ -12,16 +12,17 @@ using System.Collections.Generic;
 namespace AvaloniaExtensions;
 
 // ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable MemberCanBeProtected.Global
 public abstract class CanvasComponentBase : ComponentBase {
   private static readonly Dictionary<Canvas, CanvasComponentBase> CANVAS_COMPONENT_DICTIONARY = new();
 
   private readonly List<Action> _resizeActions = new List<Action>();
-  protected Canvas Canvas { get; private set; } = null!; // This will be initialised before it's being used (hopefully :P)
+  public Canvas Canvas { get; private set; } = null!; // This will be initialised before it's being used (hopefully :P)
 
-  public CustomStyle CustomStyle { get; protected set; } = new CustomStyle(new Thickness(10), 80,
+  public CustomStyle CustomStyle { get; set; } = new CustomStyle(new Thickness(10), 80,
       ThemedBrushes.FromHex("FAFAFA", "363636"));
 
-  protected Control? InitialControlToFocus { get; set; }
+  public Control? InitialControlToFocus { get; set; }
 
   protected override object Build() {
     Canvas = new Canvas();
@@ -94,48 +95,48 @@ public abstract class CanvasComponentBase : ComponentBase {
   }
 
   // --- Control initializers ---
-  protected Button AddButton(string text, Action<RoutedEventArgs> onClick) => AddButton(text).OnClick(onClick);
-  protected Button AddButton(string text) {
+  public Button AddButton(string text, Action<RoutedEventArgs> onClick) => AddButton(text).OnClick(onClick);
+  public Button AddButton(string text) {
     return Add(new Button())
         .Content(text)
         .MinWidth(CustomStyle.MinWidth)
         .HorizontalContentAlignment(HorizontalAlignment.Center);
   }
 
-  protected TextBox AddMultilineTextBox(string text) => AddMultilineTextBox().Text(text);
-  protected TextBox AddMultilineTextBox() => AddTextBox().AcceptsReturn(true).AcceptsTab(true);
-  protected TextBox AddTextBox(string text) => AddTextBox().Text(text);
-  protected TextBox AddTextBox() => Add(new TextBox()).MinWidth(CustomStyle.MinWidth * 2);
+  public TextBox AddMultilineTextBox(string text) => AddMultilineTextBox().Text(text);
+  public TextBox AddMultilineTextBox() => AddTextBox().AcceptsReturn(true).AcceptsTab(true);
+  public TextBox AddTextBox(string text) => AddTextBox().Text(text);
+  public TextBox AddTextBox() => Add(new TextBox()).MinWidth(CustomStyle.MinWidth * 2);
 
-  protected CheckBox AddCheckBox(string text, Action<RoutedEventArgs> onIsCheckedChanged) {
+  public CheckBox AddCheckBox(string text, Action<RoutedEventArgs> onIsCheckedChanged) {
     var checkBox = AddCheckBox(text);
     checkBox.OnIsCheckedChanged(onIsCheckedChanged);
     return checkBox;
   }
-  protected CheckBox AddCheckBox(string text) => AddCheckBox().Content(text);
-  protected CheckBox AddCheckBox() => Add(new CheckBox());
+  public CheckBox AddCheckBox(string text) => AddCheckBox().Content(text);
+  public CheckBox AddCheckBox() => Add(new CheckBox());
 
-  protected RadioButton AddRadio(string groupName, string text, Action<RoutedEventArgs> onIsCheckedChanged) {
+  public RadioButton AddRadio(string groupName, string text, Action<RoutedEventArgs> onIsCheckedChanged) {
     var radio = AddRadio(groupName, text);
     radio.OnIsCheckedChanged(onIsCheckedChanged);
     return radio;
   }
-  protected RadioButton AddRadio(string groupName, string text) => AddRadio(groupName).Content(text);
-  protected RadioButton AddRadio(string groupName) => Add(new RadioButton()).GroupName(groupName);
+  public RadioButton AddRadio(string groupName, string text) => AddRadio(groupName).Content(text);
+  public RadioButton AddRadio(string groupName) => Add(new RadioButton()).GroupName(groupName);
 
-  protected ExtendedComboBox<T> AddComboBox<T>(IEnumerable<T> items,
+  public ExtendedComboBox<T> AddComboBox<T>(IEnumerable<T> items,
       Action<SelectedItemChangedEventArgs<T>> onSelectedItemChanged) where T : class, IControlContentItem {
     return AddComboBox(items).OnSelectedItemChanged(onSelectedItemChanged);
   }
-  protected ExtendedComboBox<T> AddComboBox<T>(IEnumerable<T> items) where T : class, IControlContentItem {
+  public ExtendedComboBox<T> AddComboBox<T>(IEnumerable<T> items) where T : class, IControlContentItem {
     return AddComboBox(items, i => i.ControlContent());
   }
-  protected ExtendedComboBox<string> AddComboBox(IEnumerable<string> items,
+  public ExtendedComboBox<string> AddComboBox(IEnumerable<string> items,
       Action<SelectedItemChangedEventArgs<string>> onSelectedItemChanged) {
     return AddComboBox(items).OnSelectedItemChanged(onSelectedItemChanged);
   }
-  protected ExtendedComboBox<string> AddComboBox(IEnumerable<string> items) => AddComboBox(items, i => i);
-  protected ExtendedComboBox<T> AddComboBox<T>(IEnumerable<T> items, Func<T, string> contentFunc) where T : class {
+  public ExtendedComboBox<string> AddComboBox(IEnumerable<string> items) => AddComboBox(items, i => i);
+  public ExtendedComboBox<T> AddComboBox<T>(IEnumerable<T> items, Func<T, string> contentFunc) where T : class {
     var comboBox = Add(new ExtendedComboBox<T>()).WithItems(items, contentFunc).MinWidth(CustomStyle.MinWidth);
     if (comboBox.Items.Count > 0) {
       comboBox.SelectedIndex = 0;
@@ -143,47 +144,47 @@ public abstract class CanvasComponentBase : ComponentBase {
     return comboBox;
   }
 
-  protected Label AddLabelRightOf(string text) => AddLabelRightOf(text, CanvasControlExtensions.CurrentReferencedOrThrow);
-  protected Label AddLabelRightOf(string text, Control target) => AddLabel(text, target).XRightOf(target).YCenter(target);
-  protected Label AddLabelLeftOf(string text) => AddLabelLeftOf(text, CanvasControlExtensions.CurrentReferencedOrThrow);
-  protected Label AddLabelLeftOf(string text, Control target) => AddLabel(text, target).XLeftOf(target).YCenter(target);
-  protected Label AddLabelAbove(string text) => AddLabelAbove(text, CanvasControlExtensions.CurrentReferencedOrThrow);
-  protected Label AddLabelAbove(string text, Control target) => AddLabel(text, target).Above(target);
-  protected Label AddLabelBelow(string text) => AddLabelBelow(text, CanvasControlExtensions.CurrentReferencedOrThrow);
-  protected Label AddLabelBelow(string text, Control target) => AddLabel(text, target).Below(target);
-  protected Label InsertLabelAbove(string text) {
+  public Label AddLabelRightOf(string text) => AddLabelRightOf(text, CanvasControlExtensions.CurrentReferencedOrThrow);
+  public Label AddLabelRightOf(string text, Control target) => AddLabel(text, target).XRightOf(target).YCenter(target);
+  public Label AddLabelLeftOf(string text) => AddLabelLeftOf(text, CanvasControlExtensions.CurrentReferencedOrThrow);
+  public Label AddLabelLeftOf(string text, Control target) => AddLabel(text, target).XLeftOf(target).YCenter(target);
+  public Label AddLabelAbove(string text) => AddLabelAbove(text, CanvasControlExtensions.CurrentReferencedOrThrow);
+  public Label AddLabelAbove(string text, Control target) => AddLabel(text, target).Above(target);
+  public Label AddLabelBelow(string text) => AddLabelBelow(text, CanvasControlExtensions.CurrentReferencedOrThrow);
+  public Label AddLabelBelow(string text, Control target) => AddLabel(text, target).Below(target);
+  public Label InsertLabelAbove(string text) {
     return InsertLabelAbove(text, CanvasControlExtensions.CurrentReferencedOrThrow);
   }
-  protected Label InsertLabelAbove(string text, Control target) {
+  public Label InsertLabelAbove(string text, Control target) {
     var label = AddLabel(text, target).XAlignLeft(target).YAlignTop(target);
     target.YBelow(label);
     return label;
   }
-  protected Label InsertLabelLeftOf(string text, double width = double.NaN) {
+  public Label InsertLabelLeftOf(string text, double width = double.NaN) {
     return InsertLabelLeftOf(text, CanvasControlExtensions.CurrentReferencedOrThrow, width);
   }
-  protected Label InsertLabelLeftOf(string text, Control target, double width = double.NaN) {
+  public Label InsertLabelLeftOf(string text, Control target, double width = double.NaN) {
     var label = AddLabel(text, target).XAlignLeft(target).YCenter(target).Width(width);
     target.XRightOf(label);
     return label;
   }
-  protected Label AddLabel(string text, Control target) => Add(new Label()).Content(text).Target(target);
+  public Label AddLabel(string text, Control target) => Add(new Label()).Content(text).Target(target);
 
-  protected TextBlock AddTextBlockHeader(string text) => AddTextBlock(text).FontSize(20).FontWeight(FontWeight.Bold);
-  protected TextBlock AddTextBlock(string text) => Add(new TextBlock()).Text(text);
+  public TextBlock AddTextBlockHeader(string text) => AddTextBlock(text).FontSize(20).FontWeight(FontWeight.Bold);
+  public TextBlock AddTextBlock(string text) => Add(new TextBlock()).Text(text);
 
-  protected Image AddImage(int width, int height) => AddImage().Width(width).Height(height);
-  protected Image AddImage(string fileName) => AddImage(new Bitmap(fileName));
-  protected Image AddImage(Bitmap bitmap) => AddImage().Source(bitmap);
-  protected Image AddImage() => Add(new Image());
+  public Image AddImage(int width, int height) => AddImage().Width(width).Height(height);
+  public Image AddImage(string fileName) => AddImage(new Bitmap(fileName));
+  public Image AddImage(Bitmap bitmap) => AddImage().Source(bitmap);
+  public Image AddImage() => Add(new Image());
 
-  protected Separator AddSeparator() {
+  public Separator AddSeparator() {
     var control = Add(new Separator());
     control.Margin(control.Margin.Left * 2, control.Margin.Top, control.Margin.Right * 2, control.Margin.Bottom);
     return control;
   }
 
-  protected T Add<T>(T control) where T : Control {
+  public T Add<T>(T control) where T : Control {
     Canvas.Children.Add(control);
     return control.Ref().Margin(CustomStyle.Margin);
   }
