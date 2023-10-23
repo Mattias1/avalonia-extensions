@@ -34,3 +34,4 @@ lib/**
 !lib/.gitkeep
 AvaloniaExtensions/lib/Avalonia.Markup.Declarative/**
 !AvaloniaExtensions/lib/Avalonia.Markup.Declarative/.gitkeep
+ExampleApp/publish-*/*
