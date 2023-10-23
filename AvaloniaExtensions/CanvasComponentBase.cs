@@ -171,7 +171,8 @@ public abstract class CanvasComponentBase : ComponentBase {
   public Label AddLabel(string text, Control target) => Add(new Label()).Content(text).Target(target);
 
   public TextBlock AddTextBlockHeader(string text) => AddTextBlock(text).FontSize(20).FontWeight(FontWeight.Bold);
-  public TextBlock AddTextBlock(string text) => Add(new TextBlock()).Text(text);
+  public TextBlock AddTextBlock(string text) => AddTextBlock().Text(text);
+  public TextBlock AddTextBlock() => Add(new TextBlock());
 
   public Image AddImage(int width, int height) => AddImage().Width(width).Height(height);
   public Image AddImage(string fileName) => AddImage(new Bitmap(fileName));
