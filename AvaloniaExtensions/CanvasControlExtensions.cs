@@ -87,21 +87,26 @@ public static class CanvasControlExtensions {
 
   // --- Positioning of individual coordinates ---
   public static T XLeftOf<T>(this T control, Control other) where T : Control {
+    ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control,
         () => control.Left(other.GetX() - control.GetWidth() - control.Margin.Right));
   }
   public static T XAlignLeft<T>(this T control, Control other) where T : Control {
+    ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control, () => control.Left(other.GetX()));
   }
   public static T XCenter<T>(this T control, Control other) where T : Control {
+    ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control,
         () => control.Left(other.GetX() + (other.GetWidth() - control.GetWidth()) * .5));
   }
   public static T XAlignRight<T>(this T control, Control other) where T : Control {
+    ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control,
         () => control.Left(other.GetX() + other.GetWidth() - control.GetWidth()));
   }
   public static T XRightOf<T>(this T control, Control other) where T : Control {
+    ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control,
         () => control.Left(other.GetX() + other.GetWidth() + other.Margin.Left));
   }
@@ -123,22 +128,27 @@ public static class CanvasControlExtensions {
   }
 
   public static T YAbove<T>(this T control, Control other) where T : Control {
+    ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control, () => {
       control.Top(other.GetY() - control.GetHeight() - control.Margin.Bottom);
     });
   }
   public static T YAlignTop<T>(this T control, Control other) where T : Control {
+    ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control, () => control.Top(other.GetY()));
   }
   public static T YCenter<T>(this T control, Control other) where T : Control {
+    ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control,
         () => control.Top(other.GetY() + (other.GetHeight() - control.GetHeight()) * .5));
   }
   public static T YAlignBottom<T>(this T control, Control other) where T : Control {
+    ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control,
         () => control.Top(other.GetY() + other.GetHeight() - control.GetHeight()));
   }
   public static T YBelow<T>(this T control, Control other) where T : Control {
+    ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control,
         () => control.Top(other.GetY() + other.GetHeight() + other.Margin.Top));
   }
@@ -162,12 +172,14 @@ public static class CanvasControlExtensions {
   // --- Size and stretching ---
   public static T StretchRightTo<T>(this T control) where T : Control => control.StretchRightTo(LastReferencedOrThrow);
   public static T StretchRightTo<T>(this T control, Control other) where T : Control {
+    ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control,
         () => control.Width(other.GetX() - control.GetX() - Math.Max(control.Margin.Right, other.Margin.Left)));
   }
 
   public static T StretchDownTo<T>(this T control) where T : Control => control.StretchDownTo(LastReferencedOrThrow);
   public static T StretchDownTo<T>(this T control, Control other) where T : Control {
+    ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control,
         () => control.Height(other.GetY() - control.GetY() - Math.Max(control.Margin.Bottom, other.Margin.Top)));
   }
@@ -198,5 +210,11 @@ public static class CanvasControlExtensions {
       var fullHeight = canvas.GetHeight() - control.GetY() - control.Margin.Top - control.Margin.Bottom;
       control.Height(fullHeight * numerator / denominator - control.Margin.Bottom * .5f);
     });
+  }
+
+  private static void ThrowIfPositioningRelativeToYourself(Control control, Control other) {
+    if (control == other) {
+      throw new InvalidOperationException("You cannot position (or stretch) an object relative to itself.");
+    }
   }
 }
