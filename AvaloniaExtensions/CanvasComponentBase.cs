@@ -34,11 +34,11 @@ public abstract class CanvasComponentBase : ComponentBase {
   protected abstract void InitializeControls();
 
   protected override void OnSizeChanged(SizeChangedEventArgs e) {
-    HandleResize();
+    RepositionControls();
     base.OnSizeChanged(e);
   }
 
-  protected void HandleResize() => _resizeActions.ForEach(action => action());
+  public void RepositionControls() => _resizeActions.ForEach(action => action());
 
   protected override void OnLoaded(RoutedEventArgs e) {
     SetupThemeColours();
