@@ -66,13 +66,6 @@ public static class AppBuilderExtensions {
     }
 
     lifetime.MainWindow = windowFunc();
-    lifetime.MainWindow.OnActualThemeVariantChanged(() => {
-      foreach (var child in lifetime.MainWindow.GetLogicalChildren()) {
-        if (child is CanvasComponentBase canvasComponent) {
-          canvasComponent.SetupThemeColours();
-        }
-      }
-    });
     lifetime.Start(Array.Empty<string>());
 
     if (builder.Instance is null) {
