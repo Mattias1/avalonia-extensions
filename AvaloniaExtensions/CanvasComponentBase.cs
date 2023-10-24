@@ -17,7 +17,7 @@ public abstract class CanvasComponentBase : ComponentBase {
   private static readonly Dictionary<Canvas, CanvasComponentBase> CANVAS_COMPONENT_DICTIONARY = new();
 
   private readonly List<Action> _resizeActions = new List<Action>();
-  public Canvas Canvas { get; private set; } = null!; // This will be initialised before it's being used (hopefully :P)
+  public Canvas Canvas { get; private set; } = null!; // This will be initialized before it's being used (hopefully :P)
 
   public CustomStyle CustomStyle { get; set; } = new CustomStyle(new Thickness(10), 80,
       ThemedBrushes.FromHex("FAFAFA", "363636"));

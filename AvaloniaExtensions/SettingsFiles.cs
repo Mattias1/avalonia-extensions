@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text.Json;
 
@@ -9,6 +10,29 @@ public sealed class SettingsFiles {
   public static SettingsFiles Get { get; } = new SettingsFiles();
 
   private readonly Dictionary<Type, SettingsFile> _settingsFiles = new();
+
+  /// <summary>
+  /// Add a settings file if it isn't added already. It'll save the settings file when closing the app.
+  /// </summary>
+  /// <param name="path">The location of the settings file. You can use './filename.json' to save it in the apps dir.</param>
+  /// <typeparam name="T">The type of the settings class.</typeparam>
+  /// <returns></returns>
+  public void AddSettingsFileIfNotExists<T>(string path) where T : class, new() {
+    AddSettingsFileIfNotExists(path, () => new T());
+  }
+
+  /// <summary>
+  /// Add a settings file if it isn't added already. It'll save the settings file when closing the app.
+  /// </summary>
+  /// <param name="path">The location of the settings file. You can use './filename.json' to save it in the apps dir.</param>
+  /// <param name="constructorLambda">A lambda function to construct the settings object if it can't be loaded.</param>
+  /// <typeparam name="T">The type of the settings class.</typeparam>
+  /// <returns></returns>
+  public void AddSettingsFileIfNotExists<T>(string path, Func<T> constructorLambda) where T : class {
+    if (!_settingsFiles.ContainsKey(typeof(T))) {
+      AddSettingsFile(path, constructorLambda);
+    }
+  }
 
   /// <summary>
   /// Add a settings file. It'll save the settings file when closing the app.
@@ -79,14 +103,23 @@ public sealed class SettingsFiles {
   }
 
   public T GetSettings<T>() where T : class {
-    if (!_settingsFiles.TryGetValue(typeof(T), out SettingsFile? settingsFile)) {
-      throw new InvalidOperationException($"Cannot find settings with type {typeof(T)}. "
-          + "You can add it with the 'WithSettingsFile' or 'AddSettingsFile' method.");
+    if (TryGetSettings(out T? settings)) {
+      return settings;
     }
-    if (settingsFile.Settings is not T settings) {
+    throw new InvalidOperationException($"Cannot find settings with type {typeof(T)}. "
+        + "You can add it with the 'WithSettingsFile' or 'AddSettingsFile' method.");
+  }
+
+  public bool TryGetSettings<T>([NotNullWhen(returnValue: true)] out T? settings) where T : class {
+    if (!_settingsFiles.TryGetValue(typeof(T), out SettingsFile? settingsFile)) {
+      settings = null;
+      return false;
+    }
+    if (settingsFile.Settings is not T actualSettings) {
       throw new InvalidOperationException($"Cannot cast settings with type {typeof(T)} to its type, weird.");
     }
-    return settings;
+    settings = actualSettings;
+    return true;
   }
 
   private record SettingsFile(string Path, object Settings);
