@@ -19,7 +19,7 @@ This is a simple example application:
 ``` csharp
 using AvaloniaExtensions;
 
-AppBuilderExtensions.Init().StartDesktopApp("Example app", () => new ReadmeComponent());
+AppBuilderExtensionsApp.Init().StartDesktopApp("Example app", () => new ReadmeComponent());
 
 public class ReadmeComponent : CanvasComponentBase {
   protected override void InitializeControls() {
@@ -39,8 +39,13 @@ Setup development environment
 - Clone the [Avalonia.Markup.Declarative](https://github.com/AvaloniaUI/Avalonia.Markup.Declarative)
   repo in the 'lib' folder
 - Copy the needed files to the 'AvaloniaExtensions/lib/Avalonia.Markup.Declarative' folder with
-  `cp lib/Avalonia.Markup.Declarative/src/Avalonia.Markup.Declarative/*.cs
-   AvaloniaExtensions/lib/Avalonia.Markup.Declarative/`
+  ```
+  mkdir -p AvaloniaExtensions/lib/Avalonia.Markup.Declarative/
+  cd lib/Avalonia.Markup.Declarative/src/Avalonia.Markup.Declarative/
+  cp -r --parents *.cs ../../../../AvaloniaExtensions/lib/Avalonia.Markup.Declarative/
+  cp -r --parents **/*.cs ../../../../AvaloniaExtensions/lib/Avalonia.Markup.Declarative/
+  cd ../../../../
+  ```
 - Start the example app with `cd ExampleApp/ && dotnet run`
 
 

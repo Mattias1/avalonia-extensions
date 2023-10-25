@@ -1,13 +1,13 @@
-name: AvaloniaExtensions release pipeline
+name: AvaloniaExtensions CI build pipeline
 
 on:
-  push:
-    tags: [ v* ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-  publish:
+  build:
 
-    name: Publish
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
@@ -35,24 +35,3 @@ jobs:
         run: dotnet restore
       - name: Build backend
         run: dotnet build --configuration Release --no-restore
-
-      # Extract version number (v1.2.3) from the tag (refs/tags/v1.2.3)
-      - name: Extract version number
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-
-      # Create NuGet package (without the v version prefix)
-      - name: Create AvaloniaExtensions package
-        run: >
-          dotnet pack
-          --configuration Release
-          --no-restore
-          -p:PackageVersion=${RELEASE_VERSION:1}
-          AvaloniaExtensions/AvaloniaExtensions.csproj
-
-      # Upload the NuGet package
-      - name: Upload release to NuGet
-        run: >
-          dotnet nuget push **/*.nupkg
-          --source https://api.nuget.org/v3/index.json
-          -k ${{ secrets.NUGET_API_KEY }}
-          --skip-duplicate

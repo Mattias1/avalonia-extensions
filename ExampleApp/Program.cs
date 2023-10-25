@@ -3,7 +3,7 @@ using AvaloniaExtensions;
 using Avalonia.Markup.Declarative;
 using ExampleApp;
 
-AppBuilderExtensions.Init()
+AvaloniaExtensionsApp.Init()
     .WithSettingsFile<SettingsComponent.ExampleSettings>("./example-settings.json")
     .StartDesktopApp(() => ExtendedWindow.Init<MainComponent>("Example app")
         .AddLazyComponent<SettingsComponent>()

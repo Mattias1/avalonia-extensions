@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.LogicalTree;
 using Avalonia.Markup.Declarative;
 using Avalonia.Themes.Fluent;
 using System;
@@ -9,11 +8,13 @@ using System.Linq;
 
 namespace AvaloniaExtensions;
 
-public static class AppBuilderExtensions {
+public static class AvaloniaExtensionsApp {
   public static string StartupPath => AssetExtensions.StartupPath;
 
   public static AppBuilder Init() => AppBuilder.Configure<Application>().UsePlatformDetect();
+}
 
+public static class AppBuilderExtensions {
   /// <summary>
   /// Add a settings file. It'll save the settings file when closing the app.
   /// </summary>
