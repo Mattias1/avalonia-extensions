@@ -19,7 +19,7 @@ This is a simple example application:
 ``` csharp
 using AvaloniaExtensions;
 
-AppBuilderExtensionsApp.Init().StartDesktopApp("Example app", () => new ReadmeComponent());
+AvaloniaExtensionsApp.Init().StartDesktopApp("Example app", () => new ReadmeComponent());
 
 public class ReadmeComponent : CanvasComponentBase {
   protected override void InitializeControls() {
