@@ -36,16 +36,21 @@ public sealed class ExtendedWindow : Window {
   }
 
   // --- Components (that make up the 'screens' or 'views' of the application) ---
-  public void SwitchToComponent<T>() {
-    Content = FindComponent<T>();
+  public T SwitchToComponent<T>() where T : ViewBase {
+    var component = FindComponent<T>();
+    if (component is CanvasComponentBase canvasComponent) {
+      canvasComponent.ActivateOnSwitchingToComponent();
+    }
+    Content = component;
+    return component;
   }
 
-  private ViewBase FindComponent<T>() {
+  private T FindComponent<T>() where T : ViewBase {
     if (_components.TryGetValue(typeof(T), out ViewBase? component)) {
-      return component;
+      return component as T ?? throw new InvalidOperationException("Component is not of the expected type");
     }
     if (_lazyComponents.TryGetValue(typeof(T), out Func<ViewBase>? componentFunc)) {
-      var newComponent = componentFunc();
+      var newComponent = componentFunc() as T ?? throw new InvalidOperationException("Component is not of the expected type");
       _lazyComponents.Remove(typeof(T));
       _components.Add(typeof(T), newComponent);
       return newComponent;

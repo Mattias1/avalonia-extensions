@@ -13,6 +13,8 @@ public class SettingsComponent : CanvasComponentBase {
   private CheckBox _cbExampleToggle = null!;
   private TextBox _tbExampleString = null!;
 
+  private Control _last = null!;
+
   protected override void InitializeControls() {
     AddTextBlockHeader("Some settings").TopLeftInPanel();
     _cbExampleToggle = AddCheckBox("Something to toggle").Below();
@@ -25,6 +27,8 @@ public class SettingsComponent : CanvasComponentBase {
     var btnOk = AddButton("Ok", OnSaveClick);
     AddButton("Cancel", OnCancelClick).BottomRightInPanel();
     btnOk.LeftOf();
+
+    _last = _tbExampleString;
   }
 
   protected override void OnInitialized() {
@@ -56,6 +60,11 @@ public class SettingsComponent : CanvasComponentBase {
   private void SaveSettings() {
     Settings.ExampleToggle = _cbExampleToggle.IsChecked ?? false;
     Settings.ExampleString = _tbExampleString.Text;
+  }
+
+  protected override void OnSwitchingToComponent() {
+    _last = AddTextBlock("You switched to the settings component.").Below(_last);
+    RepositionControls();
   }
 
   public class ExampleSettings {

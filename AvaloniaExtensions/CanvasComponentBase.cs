@@ -68,7 +68,10 @@ public abstract class CanvasComponentBase : ComponentBase {
   }
   public void RegisterOnResizeAction(Action resizeAction) => _resizeActions.Add(resizeAction);
 
-  public void SwitchToComponent<T>() => FindWindow().SwitchToComponent<T>();
+  public T SwitchToComponent<T>() where T : ViewBase => FindWindow().SwitchToComponent<T>();
+
+  internal void ActivateOnSwitchingToComponent() => OnSwitchingToComponent();
+  protected virtual void OnSwitchingToComponent() { }
 
   public T GetSettings<T>() where T : class => SettingsFiles.Get.GetSettings<T>();
 
