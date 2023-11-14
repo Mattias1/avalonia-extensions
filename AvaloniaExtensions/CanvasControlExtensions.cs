@@ -15,6 +15,10 @@ public static class CanvasControlExtensions {
   public static Control LastReferencedOrThrow => LastReferenced ?? throw new InvalidOperationException(REF_ERROR);
   public static Control CurrentReferencedOrThrow => CurrentReferenced ?? throw new InvalidOperationException(REF_ERROR);
 
+  public static Control PreviousControlFor(Control control) {
+    return control == CurrentReferenced ? LastReferencedOrThrow : CurrentReferencedOrThrow;
+  }
+
   public static T Ref<T>(this T control) where T : Control {
     LastReferenced = CurrentReferenced;
     CurrentReferenced = control;
@@ -34,10 +38,10 @@ public static class CanvasControlExtensions {
   public static double GetHeight(this Control ctrl) => double.IsNaN(ctrl.Height) ? ctrl.Bounds.Height : ctrl.Height;
 
   // --- Position relative to other controls ---
-  public static T RightOf<T>(this T control) where T : Control => control.RightOf(LastReferencedOrThrow);
-  public static T LeftOf<T>(this T control) where T : Control => control.LeftOf(LastReferencedOrThrow);
-  public static T Below<T>(this T control) where T : Control => control.Below(LastReferencedOrThrow);
-  public static T Above<T>(this T control) where T : Control => control.Above(LastReferencedOrThrow);
+  public static T RightOf<T>(this T control) where T : Control => control.RightOf(PreviousControlFor(control));
+  public static T LeftOf<T>(this T control) where T : Control => control.LeftOf(PreviousControlFor(control));
+  public static T Below<T>(this T control) where T : Control => control.Below(PreviousControlFor(control));
+  public static T Above<T>(this T control) where T : Control => control.Above(PreviousControlFor(control));
 
   public static T RightOf<T>(this T control, Control other) where T : Control {
     return control.YAlignTop(other).XRightOf(other);
@@ -86,25 +90,34 @@ public static class CanvasControlExtensions {
   }
 
   // --- Positioning of individual coordinates ---
+  public static T XLeftOf<T>(this T control) where T : Control => control.XLeftOf(PreviousControlFor(control));
   public static T XLeftOf<T>(this T control, Control other) where T : Control {
     ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control,
         () => control.Left(other.GetX() - control.GetWidth() - control.Margin.Right));
   }
+
+  public static T XAlignLeft<T>(this T control) where T : Control => control.XAlignLeft(PreviousControlFor(control));
   public static T XAlignLeft<T>(this T control, Control other) where T : Control {
     ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control, () => control.Left(other.GetX()));
   }
+
+  public static T XCenter<T>(this T control) where T : Control => control.XCenter(PreviousControlFor(control));
   public static T XCenter<T>(this T control, Control other) where T : Control {
     ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control,
         () => control.Left(other.GetX() + (other.GetWidth() - control.GetWidth()) * .5));
   }
+
+  public static T XAlignRight<T>(this T control) where T : Control => control.XAlignRight(PreviousControlFor(control));
   public static T XAlignRight<T>(this T control, Control other) where T : Control {
     ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control,
         () => control.Left(other.GetX() + other.GetWidth() - control.GetWidth()));
   }
+
+  public static T XRightOf<T>(this T control) where T : Control => control.XRightOf(PreviousControlFor(control));
   public static T XRightOf<T>(this T control, Control other) where T : Control {
     ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control,
@@ -127,26 +140,35 @@ public static class CanvasControlExtensions {
     });
   }
 
+  public static T YAbove<T>(this T control) where T : Control => control.YAbove(PreviousControlFor(control));
   public static T YAbove<T>(this T control, Control other) where T : Control {
     ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control, () => {
       control.Top(other.GetY() - control.GetHeight() - control.Margin.Bottom);
     });
   }
+
+  public static T YAlignTop<T>(this T control) where T : Control => control.YAlignTop(PreviousControlFor(control));
   public static T YAlignTop<T>(this T control, Control other) where T : Control {
     ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control, () => control.Top(other.GetY()));
   }
+
+  public static T YCenter<T>(this T control) where T : Control => control.YCenter(PreviousControlFor(control));
   public static T YCenter<T>(this T control, Control other) where T : Control {
     ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control,
         () => control.Top(other.GetY() + (other.GetHeight() - control.GetHeight()) * .5));
   }
+
+  public static T YAlignBottom<T>(this T control) where T : Control => control.YAlignBottom(PreviousControlFor(control));
   public static T YAlignBottom<T>(this T control, Control other) where T : Control {
     ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control,
         () => control.Top(other.GetY() + other.GetHeight() - control.GetHeight()));
   }
+
+  public static T YBelow<T>(this T control) where T : Control => control.YBelow(PreviousControlFor(control));
   public static T YBelow<T>(this T control, Control other) where T : Control {
     ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control,
@@ -170,14 +192,14 @@ public static class CanvasControlExtensions {
   }
 
   // --- Size and stretching ---
-  public static T StretchRightTo<T>(this T control) where T : Control => control.StretchRightTo(LastReferencedOrThrow);
+  public static T StretchRightTo<T>(this T control) where T : Control => control.StretchRightTo(PreviousControlFor(control));
   public static T StretchRightTo<T>(this T control, Control other) where T : Control {
     ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control,
         () => control.Width(other.GetX() - control.GetX() - Math.Max(control.Margin.Right, other.Margin.Left)));
   }
 
-  public static T StretchDownTo<T>(this T control) where T : Control => control.StretchDownTo(LastReferencedOrThrow);
+  public static T StretchDownTo<T>(this T control) where T : Control => control.StretchDownTo(PreviousControlFor(control));
   public static T StretchDownTo<T>(this T control, Control other) where T : Control {
     ThrowIfPositioningRelativeToYourself(control, other);
     return CanvasComponentBase.RegisterOnResizeAction(control,

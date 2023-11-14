@@ -22,8 +22,9 @@ public class SettingsComponent : CanvasComponentBase {
     InsertLabelLeftOf("Text:", _tbExampleString, LABEL_WIDTH);
 
     AddButton("Reset defaults", OnResetSettingsClick).BottomLeftInPanel();
+    var btnOk = AddButton("Ok", OnSaveClick);
     AddButton("Cancel", OnCancelClick).BottomRightInPanel();
-    AddButton("Ok", OnSaveClick).LeftOf();
+    btnOk.LeftOf();
   }
 
   protected override void OnInitialized() {
