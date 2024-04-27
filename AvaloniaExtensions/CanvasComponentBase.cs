@@ -32,6 +32,10 @@ public abstract class CanvasComponentBase : ComponentBase {
     return Canvas;
   }
 
+  /// <summary>
+  /// Override this method to initialize your controls.
+  /// Warning: this method is called from the constructor, so your constructor content might not be executed yet.
+  /// </summary>
   protected abstract void InitializeControls();
 
   protected override void OnSizeChanged(SizeChangedEventArgs e) {
