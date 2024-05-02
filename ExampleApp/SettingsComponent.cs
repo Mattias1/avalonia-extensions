@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaExtensions;
 
@@ -23,9 +24,9 @@ public class SettingsComponent : CanvasComponentBase {
     InsertLabelLeftOf("Checkbox:", _cbExampleToggle, LABEL_WIDTH);
     InsertLabelLeftOf("Text:", _tbExampleString, LABEL_WIDTH);
 
-    AddButton("Reset defaults", OnResetSettingsClick).BottomLeftInPanel();
-    var btnOk = AddButton("Ok", OnSaveClick);
-    AddButton("Cancel", OnCancelClick).BottomRightInPanel();
+    AddButton("Reset defaults", OnResetSettingsClick).HotKeyAlt(Key.R).BottomLeftInPanel();
+    var btnOk = AddButton("Ok", OnSaveClick).HotKeyCtrl(Key.Enter);
+    AddButton("Cancel", OnCancelClick).HotKey("Ctrl+Escape").BottomRightInPanel();
     btnOk.LeftOf();
 
     _last = _tbExampleString;

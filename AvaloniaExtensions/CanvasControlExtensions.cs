@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Markup.Declarative;
 using System;
 
@@ -28,6 +29,18 @@ public static class CanvasControlExtensions {
   // --- Misc ---
   public static T WithInitialFocus<T>(this T control) where T : Control {
     return CanvasComponentBase.FindCanvasComponent(control).SetInitialControlToFocus(control);
+  }
+
+  public static T HotKeyCtrl<T>(this T control, Key key) where T : Button => control.HotKey(key, KeyModifiers.Control);
+  public static T HotKeyAlt<T>(this T control, Key key) where T : Button => control.HotKey(key, KeyModifiers.Alt);
+  public static T HotKey<T>(this T control, Key key, KeyModifiers modifiers) where T : Button {
+    control.HotKey(new KeyGesture(key, modifiers));
+    return control;
+  }
+
+  public static T HotKey<T>(this T control, string hotkey) where T : Button {
+    control.HotKey(KeyGesture.Parse(hotkey));
+    return control;
   }
 
   // --- Basic position and size ---
