@@ -36,16 +36,6 @@ For a more elaborate example, you can take a look at the
 
 Setup development environment
 ------------------------------
-- Clone the [Avalonia.Markup.Declarative](https://github.com/AvaloniaUI/Avalonia.Markup.Declarative)
-  repo in the 'lib' folder
-- Copy the needed files to the 'AvaloniaExtensions/lib/Avalonia.Markup.Declarative' folder with
-  ```
-  mkdir -p AvaloniaExtensions/lib/Avalonia.Markup.Declarative/
-  cd lib/Avalonia.Markup.Declarative/src/Avalonia.Markup.Declarative/
-  cp -r --parents *.cs ../../../../AvaloniaExtensions/lib/Avalonia.Markup.Declarative/
-  cp -r --parents **/*.cs ../../../../AvaloniaExtensions/lib/Avalonia.Markup.Declarative/
-  cd ../../../../
-  ```
 - Start the example app with `cd ExampleApp/ && dotnet run`
 
 

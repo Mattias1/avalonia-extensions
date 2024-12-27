@@ -1,17 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvuTemplate", "lib\Avalonia.Markup.Declarative\src\Samples\MvuTemplate\MvuTemplate.csproj", "{33DFD7C7-D583-43B7-89FD-FF4A276ACD29}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.Markup.Declarative", "lib\Avalonia.Markup.Declarative\src\Avalonia.Markup.Declarative\Avalonia.Markup.Declarative.csproj", "{BF4FDD31-ECF4-4706-A45F-1EA354317E66}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.Markup.Declarative.SourceGenerator", "lib\Avalonia.Markup.Declarative\src\Avalonia.Markup.Declarative.SourceGenerator\Avalonia.Markup.Declarative.SourceGenerator.csproj", "{2E38FDEB-F803-49E1-9F29-D8EF96350F64}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{154BDDEC-284A-49D1-94A4-8EB3D8FC85A1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaMarkupSample", "lib\Avalonia.Markup.Declarative\src\Samples\AvaloniaMarkupSample\AvaloniaMarkupSample.csproj", "{B100364B-E8E3-4883-82AB-E23B5FBF4802}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaImgTool", "lib\Avalonia.Markup.Declarative\src\Samples\AvaloniaImgTool\AvaloniaImgTool.csproj", "{E6B76559-9AC9-45DD-9512-9F748C650CF2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleApp", "ExampleApp\ExampleApp.csproj", "{9886E9EC-1784-4C25-A4E3-0D51966C2A61}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaExtensions", "AvaloniaExtensions\AvaloniaExtensions.csproj", "{9E02B6CB-6AEF-486E-8F3D-C9FE37B40771}"
@@ -22,26 +10,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{33DFD7C7-D583-43B7-89FD-FF4A276ACD29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{33DFD7C7-D583-43B7-89FD-FF4A276ACD29}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{33DFD7C7-D583-43B7-89FD-FF4A276ACD29}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{33DFD7C7-D583-43B7-89FD-FF4A276ACD29}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF4FDD31-ECF4-4706-A45F-1EA354317E66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF4FDD31-ECF4-4706-A45F-1EA354317E66}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF4FDD31-ECF4-4706-A45F-1EA354317E66}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF4FDD31-ECF4-4706-A45F-1EA354317E66}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2E38FDEB-F803-49E1-9F29-D8EF96350F64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E38FDEB-F803-49E1-9F29-D8EF96350F64}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E38FDEB-F803-49E1-9F29-D8EF96350F64}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E38FDEB-F803-49E1-9F29-D8EF96350F64}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B100364B-E8E3-4883-82AB-E23B5FBF4802}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B100364B-E8E3-4883-82AB-E23B5FBF4802}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B100364B-E8E3-4883-82AB-E23B5FBF4802}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B100364B-E8E3-4883-82AB-E23B5FBF4802}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E6B76559-9AC9-45DD-9512-9F748C650CF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E6B76559-9AC9-45DD-9512-9F748C650CF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E6B76559-9AC9-45DD-9512-9F748C650CF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E6B76559-9AC9-45DD-9512-9F748C650CF2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9886E9EC-1784-4C25-A4E3-0D51966C2A61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9886E9EC-1784-4C25-A4E3-0D51966C2A61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9886E9EC-1784-4C25-A4E3-0D51966C2A61}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -52,10 +20,5 @@ Global
 		{9E02B6CB-6AEF-486E-8F3D-C9FE37B40771}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{BF4FDD31-ECF4-4706-A45F-1EA354317E66} = {154BDDEC-284A-49D1-94A4-8EB3D8FC85A1}
-		{2E38FDEB-F803-49E1-9F29-D8EF96350F64} = {154BDDEC-284A-49D1-94A4-8EB3D8FC85A1}
-		{33DFD7C7-D583-43B7-89FD-FF4A276ACD29} = {154BDDEC-284A-49D1-94A4-8EB3D8FC85A1}
-		{B100364B-E8E3-4883-82AB-E23B5FBF4802} = {154BDDEC-284A-49D1-94A4-8EB3D8FC85A1}
-		{E6B76559-9AC9-45DD-9512-9F748C650CF2} = {154BDDEC-284A-49D1-94A4-8EB3D8FC85A1}
 	EndGlobalSection
 EndGlobal

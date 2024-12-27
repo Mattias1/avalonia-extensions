@@ -3,6 +3,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Declarative;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AvaloniaExtensions;
 
@@ -13,10 +14,15 @@ public class ExtendedComboBox<T> : ComboBox where T : class {
 
   public ExtendedComboBox<T> WithItems(IEnumerable<T> items, Func<T, string> contentFunc) {
     foreach (var item in items) {
-      var comboBoxItem = new ComboBoxItem().Content(contentFunc(item));
-      _originalItems.Add(comboBoxItem, item);
-      Items.Add(comboBoxItem);
+      WithItem(item, contentFunc);
     }
+    return this;
+  }
+
+  public ExtendedComboBox<T> WithItem(T item, Func<T, string> contentFunc) {
+    var comboBoxItem = new ComboBoxItem().Content(contentFunc(item));
+    _originalItems.Add(comboBoxItem, item);
+    Items.Add(comboBoxItem);
     return this;
   }
 
@@ -42,5 +48,17 @@ public class SelectedItemChangedEventArgs<T> : RoutedEventArgs where T : class {
     SelectedItem = selectedItem;
     DeselectedItem = deselectedItem;
     SourceTyped = source;
+  }
+}
+
+public static class ExtendedComboBoxExtensions {
+  public static ExtendedComboBox<string> WithItems(this ExtendedComboBox<string> comboBox, params string[] items) {
+    return comboBox.WithItems(items.AsEnumerable());
+  }
+  public static ExtendedComboBox<string> WithItems(this ExtendedComboBox<string> comboBox, IEnumerable<string> items) {
+    return comboBox.WithItems(items, i => i);
+  }
+  public static ExtendedComboBox<string> WithItem(this ExtendedComboBox<string> comboBox, string item) {
+    return comboBox.WithItem(item, i => i);
   }
 }

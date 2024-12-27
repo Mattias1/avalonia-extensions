@@ -28,7 +28,7 @@ public abstract class CanvasComponentBase : ComponentBase {
     Canvas = new Canvas();
     CANVAS_COMPONENT_DICTIONARY.Add(Canvas, this);
     InitializeControls();
-    this.OnActualThemeVariantChanged(SetupThemeColours);
+    this.OnActualThemeVariantChanged(_ => SetupThemeColours());
     return Canvas;
   }
 

@@ -14,23 +14,10 @@ jobs:
       # Build
       - name: Clone avalonia-extensions
         uses: actions/checkout@v3
-      - name: Clone Avalonia.Markup.Declarative
-        uses: actions/checkout@v3
-        with:
-          repository: AvaloniaUI/Avalonia.Markup.Declarative
-          path: lib/Avalonia.Markup.Declarative
-      - name: Copy Avalonia.Markup.Declarative lib files
-        run: |
-          mkdir -p AvaloniaExtensions/lib/Avalonia.Markup.Declarative/
-          cd lib/Avalonia.Markup.Declarative/src/Avalonia.Markup.Declarative/
-          cp -r --parents *.cs ../../../../AvaloniaExtensions/lib/Avalonia.Markup.Declarative/
-          cp -r --parents **/*.cs ../../../../AvaloniaExtensions/lib/Avalonia.Markup.Declarative/
-          cd ../../../../
-
       - name: Setup dotnet sdk
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 7.0.x
+          dotnet-version: 8.0.x
       - name: Restore backend dependencies
         run: dotnet restore
       - name: Build backend
