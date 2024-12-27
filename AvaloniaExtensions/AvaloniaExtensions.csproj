@@ -16,6 +16,8 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/Mattias1/avalonia-extensions</RepositoryUrl>
     <PackageTags>avaloniaui;avalonia;gui</PackageTags>
+
+    <DefineConstants Condition=" '$(SIMPLE_THEME)'!='' ">SIMPLE_THEME</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,7 +32,8 @@
     <PackageReference Include="Avalonia" Version="11.2.3" />
     <PackageReference Include="Avalonia.Desktop" Version="11.2.3" />
     <PackageReference Include="Avalonia.Markup.Declarative" Version="11.1.3" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.3" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.3" Condition=" '$(Configuration)'=='Debug' OR '$(SIMPLE_THEME)'=='' " />
+    <PackageReference Include="Avalonia.Themes.Simple" Version="11.2.3" Condition=" '$(Configuration)'=='Debug' OR '$(SIMPLE_THEME)'!='' " />
   </ItemGroup>
 
   <ItemGroup>

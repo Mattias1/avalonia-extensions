@@ -36,7 +36,10 @@ For a more elaborate example, you can take a look at the
 
 Setup development environment
 ------------------------------
-- Start the example app with `cd ExampleApp/ && dotnet run`
+You can build and run the example app with: `cd ExampleApp/ && dotnet run`
+
+If you want to run with the simple theme to create a minimised version, you can run something like
+this: `cd ExampleApp/ && dotnet run -c Release -p SIMPLE_THEME=true ; cd ../`
 
 
 Publish release

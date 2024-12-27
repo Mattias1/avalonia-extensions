@@ -2,9 +2,15 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Declarative;
-using Avalonia.Themes.Fluent;
+using Avalonia.Styling;
 using System;
 using System.Linq;
+
+#if SIMPLE_THEME
+using Avalonia.Themes.Simple;
+#else
+using Avalonia.Themes.Fluent;
+#endif
 
 namespace AvaloniaExtensions;
 
@@ -40,6 +46,14 @@ public static class AppBuilderExtensions {
     return builder;
   }
 
+  public static AppBuilder WithTheme(this AppBuilder builder, IStyle style) {
+    if (builder.Instance is null) {
+      throw new InvalidOperationException("No builder instance found for some reason.");
+    }
+    builder.Instance.Styles.Add(style);
+    return builder;
+  }
+
   public static Application StartDesktopApp(this AppBuilder builder, string windowTitle, Func<ViewBase> contentFunc) {
     return builder.StartDesktopApp(() => ExtendedWindow.Init(windowTitle, contentFunc()));
   }
@@ -60,10 +74,14 @@ public static class AppBuilderExtensions {
     builder.SetupWithLifetime(lifetime);
 
     if (!builder.Instance?.Styles.Any() ?? false) {
-      // builder.Instance.Styles.Add(new StyleInclude(new Uri("avares://Semi.Avalonia/Themes/")) {
+      // builder.WithTheme(new StyleInclude(new Uri("avares://Semi.Avalonia/Themes/")) {
       //     Source = new Uri("avares://Semi.Avalonia/Themes/Index.axaml")
       // });
-      builder.Instance.Styles.Add(new FluentTheme());
+#if SIMPLE_THEME
+      builder.WithTheme(new SimpleTheme());
+#else
+      builder.WithTheme(new FluentTheme());
+#endif
     }
 
     lifetime.MainWindow = windowFunc();
