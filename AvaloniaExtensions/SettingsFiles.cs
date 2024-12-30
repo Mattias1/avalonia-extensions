@@ -94,6 +94,10 @@ public sealed class SettingsFiles {
   public void ResetSettings<T>() where T : class, new() => OverwriteSettings(new T());
   public void ResetSettings<T>(Func<T> constructorLambda) where T : class => OverwriteSettings(constructorLambda());
 
+  public void ForgetSettings<T>() where T : class {
+    _settingsFiles.Remove(typeof(T));
+  }
+
   public void OverwriteSettings<T>(T settings) where T : class {
     if (!_settingsFiles.TryGetValue(typeof(T), out SettingsFile? originalSettingsFile)) {
       throw new InvalidOperationException($"Cannot find settings with type {typeof(T)}. "
